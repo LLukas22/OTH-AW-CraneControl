@@ -1,0 +1,6 @@
+Power
+Down
+Right
+Up
+Left
+Toggle

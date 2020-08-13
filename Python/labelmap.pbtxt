@@ -1,0 +1,31 @@
+item {
+	id: 1
+	name: 'Power'
+}
+
+item {
+	id: 2
+	name: 'Down'
+}
+
+item {
+	id: 3
+	name: 'Right'
+}
+
+item {
+	id: 4
+	name: 'Up'
+}
+
+item {
+	id: 5
+	name: 'Left'
+}
+
+item {
+	id: 6
+	name: 'Toggle'
+}
+
+
