@@ -72,7 +72,7 @@ namespace TensorflowInstallationScript
 				new Uri(masterHttps), objectDetectionStateLabel);
 			downloadManager.RegisterFile(neuralNetFile,
 				new Uri(
-					"http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz"),
+					"http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz"),
 				neuralNetLabel);
 			downloadManager.RegisterFile(protocbufFile,
 				new Uri(
@@ -172,7 +172,7 @@ namespace TensorflowInstallationScript
 
 			Commands.Add("python -m pip install --upgrade pip");
 			Commands.Add("pip install matplotlib");
-			Commands.Add("pip install numpy==1.16");
+			//Commands.Add("pip install numpy==1.16");
 			Commands.Add("pip install jupyter");
 			Commands.Add("pip install pandas");
 			Commands.Add("pip install opencv-python");
@@ -180,13 +180,17 @@ namespace TensorflowInstallationScript
 			Commands.Add("pip install pillow");
 			Commands.Add("pip install lxml");
 			Commands.Add("pip install pip-autoremove");
+			
 			Commands.Add("pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI");
 
 			if (box_gpuSupport.CheckState == CheckState.Checked)
-				Commands.Add("pip install tensorflow-gpu=1.15.3");
+				//Commands.Add("pip install tensorflow-gpu=1.15.3");
+				Commands.Add("pip install tensorflow-gpu");
 			else
-				Commands.Add("pip install tensorflow==1.15.3");
+				//Commands.Add("pip install tensorflow==1.15.3");
+				Commands.Add("pip install tensorflow");
 
+			Commands.Add("pip install tf-models-official");
 			cmdWrapper.Execute(Commands);
 		}
 
@@ -216,14 +220,10 @@ namespace TensorflowInstallationScript
 		{
 			var uri = string.Empty;
 
-			switch (NetSelector.SelectedIndex)
-			{
-				case 0:
-					uri =
-						"http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz";
-					break;
-			}
-
+			//Old Model
+			//uri = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz";
+			uri =
+				"http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz";
 			downloadManager.RegisterFile(neuralNetFile, new Uri(uri), neuralNetLabel);
 			downloadManager.Download(neuralNetFile);
 		}
@@ -416,9 +416,27 @@ namespace TensorflowInstallationScript
 
 			CleanUpProcesses();
 
-			var train = new Train(directoryPaths);
-			train.WriteScript(directoryPaths.ObjectDetection);
-			MessageBoxHelper.Info($"Wrote Training Script! Please Execute: {Path.Combine(directoryPaths.ObjectDetection, train.ScriptName)}");
+			//var train = new Train(directoryPaths);
+			//train.WriteScript(directoryPaths.ObjectDetection);
+			//MessageBoxHelper.Info($"Wrote Training Script! Please Execute: {Path.Combine(directoryPaths.ObjectDetection, train.ScriptName)}");
+
+
+
+			//TODO: Allow Growth in model_main_tf2.py
+
+			//gpus = tf.config.experimental.list_physical_devices('GPU')
+			//if gpus:
+			//	try:
+			//		for gpu in gpus:
+			//			tf.config.experimental.set_memory_growth(gpu, True)
+			//	except RuntimeError as e:
+			//		print(e)
+
+			var Commands = new List<string>();
+			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
+			Commands.Add($"cd {directoryPaths.ObjectDetection}");
+			Commands.Add($"model_main_tf2.py --model_dir={directoryPaths.Training} --num_train_steps=50000 --sample_1_of_n_eval_examples=1 --pipeline_config_path={Path.Combine(directoryPaths.Training, "customPipeline.config")} --alsologtostderr");
+			cmdWrapper.Execute(Commands);
 		}
 
 
@@ -553,8 +571,13 @@ namespace TensorflowInstallationScript
 			                      "\t-Git\n" +
 			                      "\t-Microsoft C++ Build Tool(v14.0 or newer)\n" +
 			                      "\t-GPU:\n" +
-			                      "\t -CUDA 10\n" +
-			                      "\t -cuDNN(7.6.X) for CUDA 10"
+								  "\t -CUDA 10 for TF1 or CUDA 10.1 for TF2\n" +
+			                      "\t -cuDNN(7.6.X) for CUDA 10/10.1"
+								  +"To Check Your Installation Run:" +
+								  "\t import tensorflow as tf"+
+								  "\t assert tf.test.is_gpu_available()"+
+								  "\t print(assert tf.test.is_built_with_cuda())"
+
 			);
 		}
 

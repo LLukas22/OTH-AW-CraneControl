@@ -25,7 +25,8 @@ namespace TensorflowInstallationScript.Scripts
 
 			if (list.Any(x => x.Contains("fine_tune_checkpoint:")))
 				list[list.IndexOf(list.FirstOrDefault(x => x.Contains("fine_tune_checkpoint:")))]
-					= $"fine_tune_checkpoint: {CleanUpPath(Path.Combine(directoryPaths.ObjectDetection, @"net/model.ckpt"))}";
+					//= $"fine_tune_checkpoint: {CleanUpPath(Path.Combine(directoryPaths.ObjectDetection, @"net/model.ckpt"))}";
+					= $"fine_tune_checkpoint: {CleanUpPath(Path.Combine(directoryPaths.ObjectDetection, @"net/checkpoint/ckpt-0"))}";
 
 			if (list.Any(x => x.Contains("label_map_path:")))
 			{
