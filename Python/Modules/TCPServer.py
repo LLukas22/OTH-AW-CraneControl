@@ -1,5 +1,5 @@
 import sys
-from Enums import HandStates
+from Modules.NameService import HandStates
 import os
 import socket
 from threading import Thread
@@ -72,12 +72,10 @@ class Payload(object):
         return self.data
 
 
-class TCPServer(object):
-    """TCP Server to send/recieve Data"""
+class Server(object):
+    """Server to send/recieve Data"""
 
     def __init__(self, port, labels,threshhold, bufferSize=1024):
-        
-        
         self.threshhold = threshhold
         self.labels = labels
         self.BUFFER_SIZE = bufferSize
@@ -154,6 +152,7 @@ class TCPServer(object):
             if(activeslice.count(self.ActiveHandstate)==0):
                 self.ActiveHandstate = HandStates.No
         self.payload.update(self.ActiveHandstate)
+        
     def stop(self):
         self.IsActive = False
         time.sleep(0.5)
