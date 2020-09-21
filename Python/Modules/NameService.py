@@ -27,5 +27,6 @@ class Icons(object):
             os.getcwd(), 'Images/poweron.png')).resize((50, 50), Image.ANTIALIAS))
         self.poweroff = ImageTk.PhotoImage(Image.open(os.path.join(
             os.getcwd(), 'Images/poweroff.png')).resize((50, 50), Image.ANTIALIAS))
+
       
    
