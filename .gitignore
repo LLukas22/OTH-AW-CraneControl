@@ -21,3 +21,11 @@ packages
 obj/
 [Rr]elease*/
 _ReSharper*/
+*.aux
+*.gz
+*.fdb_latexmk
+*.lof
+*.lot
+*.fls
+*.out
+*.toc

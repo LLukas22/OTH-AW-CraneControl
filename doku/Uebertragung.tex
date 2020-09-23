@@ -1,0 +1,6 @@
+\chapter{Übertragung}
+Das Programm öffnet einem Server mit dem es möglich ist die Daten per TCP/IP abzugreifen. Die Daten werden in ein 5 Byte großes Array geschrieben. Dies wird dann an den Client gesendet. Im Moment läuft der Server auf dem Port 54000. Es liegt ein Beispielprogramm eines Clients bei, welcher die Daten abgreift.
+Byteposition	0	1	2	3	4
+Bedeutung	Power Ein/Aus	Links	Rechts	Auf	Ab
+Werte	0,1	0…100	0.100	0,1,2	0,1,2
+Tabelle 3.1: Bedeutung der Bytes
