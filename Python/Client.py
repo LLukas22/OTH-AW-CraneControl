@@ -4,16 +4,21 @@ import time
 port = 54000
 powerstate = False   
 s = socket.socket()          
-s.connect(('192.168.178.115', port)) 
+s.connect(('localhost', port)) 
+lastpowermsg = False
 print("Client Created") 
 
 def BuildMessage(bytearray):
     commands = "Package Recieved from Server: "
     global powerstate
-    if(bytearray[0] == 1):
-        powerstate = not powerstate
+    global lastpowermsg
+    
+    #if(bytearray[0] == 1 and bytearray[0] != lastpowermsg):
+    #    powerstate = not powerstate
+    #lastpowermsg = bytearray[0]
 
-    if(powerstate):
+    #if(powerstate):
+    if(bytearray[0]):
         commands += "State: Active, "
     else:
         commands += "State: Deactivated, "
