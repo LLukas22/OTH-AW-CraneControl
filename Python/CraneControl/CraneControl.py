@@ -32,9 +32,9 @@ framerate = 30
 port = 54000
 acceleration = 2
 videoDevice = 0
-lightmodel = 'detectV2.tflite'
-heavymodel = 'frozen_inference_graph.pb'
-labels = TF.returnLabels(os.path.join(os.getcwd(), 'labelmap.txt'))
+lightmodel = 'TFModels/detectV2.tflite'
+heavymodel = 'TFModels/frozen_inference_graph.pb'
+labels = TF.returnLabels(os.path.join(os.getcwd(), 'TFModels/labelmap.txt'))
 
 
 view = tk.Tk()
