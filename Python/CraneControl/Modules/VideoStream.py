@@ -8,8 +8,6 @@ import platform
 from Modules.NameService import Icons
 
 
-
-
 def returnVideoStream(device):
     if(any(platform.win32_ver())):
         return cv2.VideoCapture(device  + cv2.CAP_DSHOW)
@@ -27,8 +25,7 @@ class VideoStream(object):
         ret = self.stream.set(3, self.model.resolution[0])
         ret = self.stream.set(4, self.model.resolution[1])
         (self.status, self.frame) = self.stream.read()
-        self.thread = Thread(target=self.update, args=())
-        self.thread.daemon = True
+        self.thread = Thread(target=self.update, args=(),daemon = True)
         self.thread.start()
         
     def update(self):

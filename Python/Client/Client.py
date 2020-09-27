@@ -1,5 +1,6 @@
 import socket
 import time
+from time import sleep
 
 port = 54000
 powerstate = False   
@@ -13,12 +14,11 @@ def BuildMessage(bytearray):
     global powerstate
     global lastpowermsg
     
-    #if(bytearray[0] == 1 and bytearray[0] != lastpowermsg):
-    #    powerstate = not powerstate
-    #lastpowermsg = bytearray[0]
+    if(bytearray[0] == 1 and bytearray[0] != lastpowermsg):
+      powerstate = not powerstate
+    lastpowermsg = bytearray[0]
 
-    #if(powerstate):
-    if(bytearray[0]):
+    if(powerstate):
         commands += "State: Active, "
     else:
         commands += "State: Deactivated, "
@@ -39,14 +39,18 @@ def BuildMessage(bytearray):
     return commands
 
  
+lastPackage = None
 while True:
     try:
-        s.send("Recieved".encode())
-        print(BuildMessage(s.recv(1024)))
-        time.sleep(1)
+        if lastPackage is not None:
+            s.send(lastPackage)
+        else:
+            s.send("TryConnect".encode())
+        lastPackage = s.recv(1024)
+        print(BuildMessage(lastPackage)+"\t Package:"+str(lastPackage))
+        sleep(0.25)
     except ConnectionResetError as identifier:
         print("ConnectionResetError")
     except ConnectionAbortedError as exc:
         print("ConnectionAbortedError")
-
-s.close()   
+ 

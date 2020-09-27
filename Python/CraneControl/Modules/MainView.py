@@ -51,22 +51,28 @@ class MainView(object):
         self.ClientTxt.grid(row=3, column=0, columnspan=3, sticky="nw")
         self.ClientTxt.insert(tk.END, chars="None")
         # Power
-        self.PowerButton = tk.Button(self.InfoFrame, image= self.icons.poweroff, bg='white')
+        self.PowerButton = tk.Button(self.InfoFrame, image= self.icons.poweroff, bg='white',command=self.OnPowerClick)
         self.PowerButton.grid(row=4, column=0, sticky="nsew")
         # Up
         self.UpButton = tk.Button(self.InfoFrame, image=self.icons.up, bg='white')
+        self.UpButton.bind("<ButtonPress>", self.OnUpPressed)
+        self.UpButton.bind("<ButtonRelease>", self.OnUpReleased)
         self.UpButton.grid(row=4, column=1, sticky="nsew")
         # Regler
-        self.ReglerButton = tk.Button(self.InfoFrame, image=self.icons.regler, bg='white')
+        self.ReglerButton = tk.Button(self.InfoFrame, image=self.icons.regler, bg='white',command=self.OnReglerClick)
         self.ReglerButton.grid(row=4, column=2, sticky="nsew")
         # Left
-        self.LeftButton = tk.Button(self.InfoFrame, image=self.icons.left, bg='white')
+        self.LeftButton = tk.Button(self.InfoFrame, image=self.icons.left, bg='white',repeatdelay=100,repeatinterval=100,command=self.OnLeftClick)
+        self.LeftButton.bind("<ButtonRelease>", self.OnLeftReleased)
         self.LeftButton.grid(row=5, column=0, sticky="nsew")
         # Right
-        self.RightButton = tk.Button(self.InfoFrame, image=self.icons.right, bg='white')
+        self.RightButton = tk.Button(self.InfoFrame, image=self.icons.right, bg='white',repeatdelay=100,repeatinterval=100,command=self.OnRightClick)
+        self.RightButton.bind("<ButtonRelease>", self.OnRightReleased)
         self.RightButton.grid(row=5, column=2, sticky="nsew")
         # Down
         self.DownButton = tk.Button(self.InfoFrame, image=self.icons.down, bg='white')
+        self.DownButton.bind("<ButtonPress>", self.OnDownPressed)
+        self.DownButton.bind("<ButtonRelease>", self.OnDownReleased)
         self.DownButton.grid(row=6, column=1, sticky="nsew")
         # Velocity
         VelocityLabel = tk.Label(self.InfoFrame, text="Velocity :")
@@ -94,6 +100,40 @@ class MainView(object):
         self.RestartVideoStreamBtn.grid(row=11, column=2)
      
     #region ButtonClicks
+    
+    def OnPowerClick(self):
+        self.model.power = not self.model.power
+        
+    def OnReglerClick(self):
+        self.model.regler = not self.model.regler
+        
+    def OnUpPressed(self, event):
+        self.model.up = True
+    
+    def OnUpReleased(self, event):
+        self.model.up = False
+        
+    def OnDownPressed(self, event):
+        self.model.down = True
+        
+    def OnDownReleased(self, event):
+        self.model.down = False
+        
+    def OnLeftClick(self):
+        self.model.left = True
+        self.model.leftVelocity = min(100,self.model.leftVelocity+self.model.acceleration)
+        
+    def OnLeftReleased(self, event):
+        self.model.leftVelocity = 0
+        self.model.left = False
+        
+    def OnRightClick(self):
+        self.model.right = True
+        self.model.rightVelocity = min(100,self.model.rightVelocity+self.model.acceleration)
+    
+    def OnRightReleased(self, event):
+        self.model.rightVelocity = 0
+        self.model.right = False
     
     def StopServer(self):
         self.model.serverActive = not self.model.serverActive
@@ -129,19 +169,17 @@ class MainView(object):
     def drawImage(self):
         self.Refresh()
         self.root.after(self.model.delayTime, self.drawImage)
+       
 
     def Refresh(self):
         if(self.model is not None):
-
-           
             img = Image.fromarray(self.model.frameRGBA)
             imgtk = ImageTk.PhotoImage(image=img)
             self.picturebox.imgtk = imgtk
             self.picturebox.configure(image=imgtk)
            
-            self.ClientTxt.delete("1.0", tk.END)
-            self.ClientTxt.insert(tk.END, chars=self.model.client)
-            
+            self.SetText(self.ClientTxt,self.model.client)
+
             self.ChangeImage(self.PowerButton,self.model.power,self.icons.poweron,self.icons.poweroff)
             
             self.ChangeBackground(self.ReglerButton,self.model.regler,'green','white')
@@ -160,9 +198,9 @@ class MainView(object):
 #region Extensions
     def ChangeBackground(self,button,condition,colortrue,colorfalse):
         if(condition):
-            button.config(bg=colortrue)
+            button.config(bg=colortrue,activebackground = colortrue)
         else:
-             button.config(bg=colorfalse)
+             button.config(bg=colorfalse,activebackground = colortrue)
              
     def ChangeImage(self,button,condition,imagetrue,imagefalse):
         if(condition):

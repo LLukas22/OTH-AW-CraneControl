@@ -44,7 +44,6 @@ class TFInception(object):
         gpus = tf.config.experimental.list_physical_devices('GPU')
         if gpus:
             for gpu in gpus:
-                    print(gpu)
                     tf.config.experimental.set_memory_growth(gpu,True)
         self.detection_graph = tf.Graph()
         with self.detection_graph.as_default():
@@ -54,8 +53,7 @@ class TFInception(object):
                 od_graph_def.ParseFromString(serialized_graph)
                 tf.import_graph_def(od_graph_def, name='')
         self.session = tf.compat.v1.Session(graph=self.detection_graph)
-        self.thread = Thread(target=self.Detect, args=())
-        self.thread.daemon = True
+        self.thread = Thread(target=self.Detect, args=(),daemon = True)
         self.thread.start()
 
     def Detect(self):
@@ -101,7 +99,7 @@ class TFLiteInception(object):
         self.IsActive = True
         self.model = model
         self.interpreter = Interpreter(
-            model_path=os.path.join(os.getcwd(),  self.model.lightmodel))
+            model_path=os.path.join(os.getcwd(), self.model.lightmodel))
         self.interpreter.allocate_tensors()
 
         self.input_details = self.interpreter.get_input_details()
@@ -116,8 +114,7 @@ class TFLiteInception(object):
         self.input_std = 127.5
         
         
-        self.thread = Thread(target=self.Detect, args=())
-        self.thread.daemon = True
+        self.thread = Thread(target=self.Detect, args=(),daemon = True)
         self.thread.start()
 
     def Detect(self):

@@ -13,15 +13,12 @@ class Server(object):
         self.model = model
         self.BUFFER_SIZE = bufferSize
         self.conn = None
-        self.addr = None
-        self.echo = None
         self.Tcp_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         self.Tcp_socket.setsockopt(socket.SOL_SOCKET,socket.SO_REUSEADDR, 1)
         self.Tcp_socket.bind(('', self.model.port))
         self.Tcp_socket.listen(5)
-        self.thread = Thread(target=self.sendData, args=())
+        self.thread = Thread(target=self.sendData, args=(),daemon=True)
         self.IsActive = True
-        self.thread.daemon = True
         self.thread.start()
 
     def sendData(self):
@@ -29,17 +26,18 @@ class Server(object):
             while self.IsActive:
                 if(self.model.serverActive):
                     try:
-                        self.conn, self.addr = self.Tcp_socket.accept()
+                        self.conn, self.model.client = self.Tcp_socket.accept()
                         while self.IsActive:
-                                self.echo = self.conn.recv(self.BUFFER_SIZE)
+                                self.model.echo = self.conn.recv(self.BUFFER_SIZE)
                                 if(self.model.serverActive):
                                     self.conn.sendall(self.model.package)
                                 else:
                                     self.conn.sendall(bytearray([0x00, 0x00, 0x00, 0x00, 0x00]))
                     except (ConnectionResetError,OSError) as exc:
                         self.conn = None
-                        self.addr = None
-                        self.echo = None
+                        self.model.client = "None"
+                        self.model.echo = None
+                       
                                               
             if(not self.conn == None):
                 self.conn.close()
