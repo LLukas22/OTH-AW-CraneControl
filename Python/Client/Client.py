@@ -5,7 +5,7 @@ from time import sleep
 port = 54000
 powerstate = False   
 s = socket.socket()          
-s.connect(('localhost', port)) 
+s.connect(('192.168.188.42', port)) 
 lastpowermsg = False
 print("Client Created") 
 

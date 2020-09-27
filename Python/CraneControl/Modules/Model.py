@@ -11,7 +11,7 @@ import os
 class Model(object):
     """Model to hold all data"""
 
-    def __init__(self, port, resolution, framerate, threshold, labels, lightmodel, heavymodel, buffer_Lenght, evaluation_Slice_Size, min_Positive_Occurrances, acceleration, videoDevice):
+    def __init__(self, port, resolution, framerate, threshold, labels, lightmodel, heavymodel, buffer_Lenght, evaluation_Slice_Size, min_Positive_Occurrances, acceleration, videoDevice,useTfLight):
         self.resolution = resolution
         self.lightmodel = lightmodel
         self.heavymodel = heavymodel
@@ -22,6 +22,7 @@ class Model(object):
         self.client = "None"
         self.port = port
         self.echo = None
+        self.useTfLight = useTfLight
         self.labels = labels
         self.threshold = threshold
         self.down = False
