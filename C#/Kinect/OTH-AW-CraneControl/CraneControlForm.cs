@@ -4,9 +4,11 @@ using System.ComponentModel;
 using System.Data;
 using System.Drawing;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.Windows.Input;
 using CraneControl;
 using Cranecontrol.Server;
 using CraneControl.Server;
@@ -28,6 +30,10 @@ namespace OTH_AW_CraneControl
         private readonly TCPServer tcpServer;
         private Instructions directionInstructions = new Instructions();
 
+        private bool regler = false;
+        private bool axis = false;
+        private bool Key_down = false;
+
 
 
         public CraneControlForm()
@@ -39,6 +45,7 @@ namespace OTH_AW_CraneControl
 
             EnumToComboBox<Frames>(cBkinectframe);
             cBkinectframe.SelectedIndex = 1;
+
             kinect = new KinectInIt(eventAggregator, (Frames)((cBkinectframe as ComboBox).SelectedItem as dynamic).value);
 
             payload = new Payload(settings.Acceleration);
@@ -58,6 +65,7 @@ namespace OTH_AW_CraneControl
             tcpServer.ClientConnectedEvent += TcpServer_ClientConnectedEvent;
 
             splitContainer1.Panel2Collapsed = true;
+
         }
 
         private void TcpServer_ClientConnectedEvent(object sender, client_connected e)
@@ -68,15 +76,15 @@ namespace OTH_AW_CraneControl
         private void FrameArrived(FrameEventArgs frameEventArgs)
         {
             directionInstructions = frameEventArgs.Instructions;
-            ColorDirectionButtons(directionInstructions);
-            DataToPayload(directionInstructions);
+            if(!Key_down) DataToPayload(directionInstructions);
             SetBitmap(frameEventArgs.Bitmap);
         }
 
         private void DataToPayload(Instructions dirInstructions)
         {
+            ColorDirectionButtons(directionInstructions);
             cpbVelocity.Refresh(payload.Refresh(dirInstructions.leftState, dirInstructions.rightState, dirInstructions.upState,
-                dirInstructions.downState, dirInstructions.controllerState, dirInstructions.axisState));
+                    dirInstructions.downState, dirInstructions.controllerState, dirInstructions.axisState));
         }
 
         private void SetBitmap(Bitmap image)
@@ -189,6 +197,57 @@ namespace OTH_AW_CraneControl
         private void btSettings_Click(object sender, EventArgs e)
         {
             splitContainer1.Panel2Collapsed = !splitContainer1.Panel2Collapsed;
+        }
+
+        private void CraneControlForm_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            switch (e.KeyChar)
+            {
+                case 'q':
+                    if(!axis) directionInstructions.axisState = !directionInstructions.axisState;
+                    axis = true;
+                    break;
+                case 'w':
+                    directionInstructions.resetDirections();
+                    directionInstructions.upState = true;
+                    break;
+                case 'e':
+                    if(!regler) directionInstructions.controllerState = !directionInstructions.controllerState;
+                    regler = true;
+                    break;
+                case 'a':
+                    directionInstructions.resetDirections();
+                    directionInstructions.leftState = true;
+                    break;
+                case 's':
+                    directionInstructions.resetDirections();
+                    directionInstructions.downState = true;
+                    break;
+                    directionInstructions.resetDirections();
+                    directionInstructions.downState = true;
+                case 'd':
+                    directionInstructions.resetDirections();
+                    directionInstructions.rightState = true;
+                    break;
+                default:
+                    break;
+            }
+            DataToPayload(directionInstructions);
+            e.Handled = false;
+        }
+
+        private void CraneControlForm_KeyUp(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            axis = false;
+            regler = false;
+            Key_down = false;
+            e.Handled = false;
+        }
+
+        private void CraneControlForm_KeyDown(object sender, System.Windows.Forms.KeyEventArgs e)
+        {
+            Key_down = true;
+            e.Handled = false;
         }
     }
 }
