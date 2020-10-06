@@ -9,6 +9,7 @@
 #####################
 # Imports
 #####################
+from Modules.NameService import TfVersion
 import os
 import tkinter as tk
 from tkinter.ttk import *
@@ -20,8 +21,8 @@ import Modules.TfBinding as TF
 # Program
 #####################
 
-
-min_conf_threshold = 0.6
+tfVersion = TfVersion.Tf1
+min_conf_threshold = 0.4
 buffer_Lenght = 60
 evaluation_Slice_Size = 5
 min_Positive_Occurrances = 4
@@ -30,15 +31,14 @@ framerate = 30
 port = 54000
 acceleration = 2
 videoDevice = 0
-forceTfLite = False
 litemodel = 'TFModels/detectV2.tflite'
 heavymodel = 'TFModels/frozen_inference_graph.pb'
-useTfLite = TF.Initialize(forceTfLite)
-labels = TF.returnLabels(os.path.join(os.getcwd(), 'TFModels/labelmap.txt'),useTfLite)
+tfVersion = TF.Initialize(tfVersion)
+labels = TF.returnLabels(os.path.join(os.getcwd(), 'TFModels/labelmap.txt'),tfVersion)
 
 view = tk.Tk()
 view.bind('<Escape>', lambda e: view.quit())
-model = Model(port,webcam_resolution,framerate,min_conf_threshold,labels,litemodel,heavymodel,buffer_Lenght,evaluation_Slice_Size,min_Positive_Occurrances,acceleration,videoDevice,useTfLite)
+model = Model(port,webcam_resolution,framerate,min_conf_threshold,labels,litemodel,heavymodel,buffer_Lenght,evaluation_Slice_Size,min_Positive_Occurrances,acceleration,videoDevice,tfVersion)
 app = MainView(view, model)
 app.drawImage()
 view.mainloop()

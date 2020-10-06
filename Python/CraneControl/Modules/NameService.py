@@ -11,6 +11,11 @@ class HandStates(Enum):
     Power = 5
     Toggle = 6
     
+class TfVersion(Enum):
+   Tf1 = 0
+   Tf2 = 1
+   TfLite = 2
+    
 class Icons(object):
      def __init__ (self):
         self.right = ImageTk.PhotoImage(Image.open(os.path.join(
