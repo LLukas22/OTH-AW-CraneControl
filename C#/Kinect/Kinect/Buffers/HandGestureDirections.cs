@@ -10,10 +10,12 @@ namespace Kinect.Buffers
     {
         private bool directionLock;
         private int bufferWaitSize;
+        private double filter = 5.0 / 3.0;
 
-        public HandGesturesBuffer(int threshhould, int bufferWaitSize) : base(threshhould)
+        public HandGesturesBuffer(int threshhould, int bufferWaitSize, double filter) : base(threshhould)
         {
             this.bufferWaitSize = bufferWaitSize;
+            this.filter = filter;
         }
 
         private int count => Values.Count;
@@ -25,7 +27,7 @@ namespace Kinect.Buffers
             {
                 if (currentState == HandState.Lasso || Values.ElementAt(count - 1) == HandState.Lasso ||
                     Values.ElementAt(count - 2) == HandState.Lasso)
-                    return returnHandGestureDirections(vector.X, vector.Y);
+                    return returnHandGestureDirections(vector.X, vector.Y, filter);
                 directionLock = false;
             }
             else
@@ -33,7 +35,7 @@ namespace Kinect.Buffers
                 if (currentState == HandState.Lasso && Values.ElementAt(count - 1) == HandState.Lasso)
                 {
                     directionLock = true;
-                    return returnHandGestureDirections(vector.X, vector.Y);
+                    return returnHandGestureDirections(vector.X, vector.Y, filter);
                 }
             }
 
@@ -65,28 +67,28 @@ namespace Kinect.Buffers
                 }
             }
             return false;
-
-
-
-            ////throw new NotImplementedException();
-            ////TODO 1s hand zu für statechange
-            //if (curreHandState == HandState.Closed && Values.Last() == HandState.Closed && Values.ElementAt(count - 1) == HandState.Closed)
-            //    return Values.GetRange(0, count - 1).All(x => x != HandState.Closed);
-            //return false;
         }
 
-        private HandGestureDirections returnHandGestureDirections(float x, float y)
+        private HandGestureDirections returnHandGestureDirections(float x, float y,double filter)
         {
-            if (Math.Abs(x) > Math.Abs(y)) //Links oder Rechts
+            double a = x / y;
+            double b = y / x;
+            if (a > filter || b > filter)
             {
-                if (x > 0) //right
-                    return HandGestureDirections.Right;
-                return HandGestureDirections.Left;
+                if (Math.Abs(x) > Math.Abs(y))
+                {
+                    if (x > 0) //right
+                        return HandGestureDirections.Right;
+                    return HandGestureDirections.Left;
+                }
+
+                if (y > 0) //up
+                    return HandGestureDirections.Up;
+                return HandGestureDirections.Down;
             }
 
-            if (y > 0) //up
-                return HandGestureDirections.Up;
-            return HandGestureDirections.Down;
+            return HandGestureDirections.None;
+
         }
     }
 }

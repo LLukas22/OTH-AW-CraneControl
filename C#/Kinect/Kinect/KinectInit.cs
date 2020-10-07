@@ -31,10 +31,11 @@ namespace Kinect
 
         public Bitmap kinectBitmap;
 
+        static private readonly double  DirectionFilter = 5.0 / 3.0;
         private readonly Instructions kinectInstructions = new Instructions();
-        private readonly HandGesturesBuffer leftHandBuffer = new HandGesturesBuffer(bufferSize, bufferWaitSize);
+        private readonly HandGesturesBuffer leftHandBuffer = new HandGesturesBuffer(bufferSize, bufferWaitSize,DirectionFilter);
 
-        private readonly HandGesturesBuffer rightHandBuffer = new HandGesturesBuffer(bufferSize, bufferWaitSize);
+        private readonly HandGesturesBuffer rightHandBuffer = new HandGesturesBuffer(bufferSize, bufferWaitSize, DirectionFilter);
 
         public Frames Frame { get; set; }
 
