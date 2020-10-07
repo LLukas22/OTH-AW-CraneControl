@@ -119,12 +119,29 @@ namespace OTH_AW_CraneControl
 
         private void TxPort_TextChanged(object sender, EventArgs e)
         {
-            tcpServer.port = int.Parse(txPort.Text);
+            
+            try
+            {
+                tcpServer.port = int.Parse(txPort.Text);
+            }
+            catch (System.FormatException exception)
+            {
+                tcpServer.port = 54000;
+                txPort.Text = "54000";
+            }
         }
 
         private void TxAcceleration_TextChanged(object sender, EventArgs e)
         {
-            payload.acceleration = int.Parse(txAcceleration.Text);
+            try
+            {
+                payload.acceleration = int.Parse(txAcceleration.Text);
+            }
+            catch (System.FormatException exception)
+            {
+                payload.acceleration = 1;
+                txAcceleration.Text = "1";
+            }
         }
 
 
@@ -201,38 +218,47 @@ namespace OTH_AW_CraneControl
 
         private void CraneControlForm_KeyPress(object sender, KeyPressEventArgs e)
         {
-            switch (e.KeyChar)
+            if (e.KeyChar >= 'a' && e.KeyChar <= 'z')
             {
-                case 'q':
-                    if(!axis) directionInstructions.axisState = !directionInstructions.axisState;
-                    axis = true;
-                    break;
-                case 'w':
-                    directionInstructions.resetDirections();
-                    directionInstructions.upState = true;
-                    break;
-                case 'e':
-                    if(!regler) directionInstructions.controllerState = !directionInstructions.controllerState;
-                    regler = true;
-                    break;
-                case 'a':
-                    directionInstructions.resetDirections();
-                    directionInstructions.leftState = true;
-                    break;
-                case 's':
-                    directionInstructions.resetDirections();
-                    directionInstructions.downState = true;
-                    break;
-                    directionInstructions.resetDirections();
-                    directionInstructions.downState = true;
-                case 'd':
-                    directionInstructions.resetDirections();
-                    directionInstructions.rightState = true;
-                    break;
-                default:
-                    break;
+                if (cBkinectframe.Focused) btSettings.Focus();
+                if (txPort.Focused) btSettings.Focus();
+                if (txAcceleration.Focused) btSettings.Focus();
+                switch (e.KeyChar)
+                {
+                    case 'q':
+                        if (!axis) directionInstructions.axisState = !directionInstructions.axisState;
+                        axis = true;
+                        break;
+                    case 'w':
+                        directionInstructions.resetDirections();
+                        directionInstructions.upState = true;
+                        break;
+                    case 'e':
+                        if (!regler) directionInstructions.controllerState = !directionInstructions.controllerState;
+                        regler = true;
+                        break;
+                    case 'a':
+                        directionInstructions.resetDirections();
+                        directionInstructions.leftState = true;
+                        break;
+                    case 's':
+                        directionInstructions.resetDirections();
+                        directionInstructions.downState = true;
+                        break;
+                        directionInstructions.resetDirections();
+                        directionInstructions.downState = true;
+                    case 'd':
+                        directionInstructions.resetDirections();
+                        directionInstructions.rightState = true;
+                        break;
+                    default:
+                        break;
+                }
+
+                DataToPayload(directionInstructions);
+                e.Handled = true;
+                return;
             }
-            DataToPayload(directionInstructions);
             e.Handled = false;
         }
 

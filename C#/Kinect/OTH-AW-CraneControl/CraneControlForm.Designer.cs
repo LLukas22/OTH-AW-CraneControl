@@ -30,6 +30,7 @@
         {
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.gBControl = new System.Windows.Forms.GroupBox();
+            this.cpbVelocity = new CraneControl.CustomProgressBar();
             this.pbDown = new System.Windows.Forms.PictureBox();
             this.pbRight = new System.Windows.Forms.PictureBox();
             this.pbLeft = new System.Windows.Forms.PictureBox();
@@ -48,12 +49,12 @@
             this.pBClient = new System.Windows.Forms.PictureBox();
             this.lbFrame = new System.Windows.Forms.Label();
             this.lbConnected = new System.Windows.Forms.Label();
-            this.cpbVelocity = new CraneControl.CustomProgressBar();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             this.gBControl.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.cpbVelocity)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDown)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRight)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).BeginInit();
@@ -62,7 +63,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbAxis)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBCam)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBClient)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cpbVelocity)).BeginInit();
             this.SuspendLayout();
             // 
             // splitContainer1
@@ -111,6 +111,20 @@
             this.gBControl.TabIndex = 1;
             this.gBControl.TabStop = false;
             this.gBControl.Text = "Control";
+            // 
+            // cpbVelocity
+            // 
+            this.cpbVelocity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
+            this.cpbVelocity.Location = new System.Drawing.Point(10, 110);
+            this.cpbVelocity.max = 0;
+            this.cpbVelocity.min = 0;
+            this.cpbVelocity.Name = "cpbVelocity";
+            this.cpbVelocity.progressBrush = null;
+            this.cpbVelocity.progressFont = null;
+            this.cpbVelocity.progressFontBrush = null;
+            this.cpbVelocity.Size = new System.Drawing.Size(85, 25);
+            this.cpbVelocity.TabIndex = 7;
+            this.cpbVelocity.TabStop = false;
             // 
             // pbDown
             // 
@@ -286,20 +300,6 @@
             this.lbConnected.TabIndex = 3;
             this.lbConnected.Text = "Client Connected";
             // 
-            // cpbVelocity
-            // 
-            this.cpbVelocity.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.cpbVelocity.Location = new System.Drawing.Point(10, 110);
-            this.cpbVelocity.max = 0;
-            this.cpbVelocity.min = 0;
-            this.cpbVelocity.Name = "cpbVelocity";
-            this.cpbVelocity.progressBrush = null;
-            this.cpbVelocity.progressFont = null;
-            this.cpbVelocity.progressFontBrush = null;
-            this.cpbVelocity.Size = new System.Drawing.Size(85, 25);
-            this.cpbVelocity.TabIndex = 7;
-            this.cpbVelocity.TabStop = false;
-            // 
             // CraneControlForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -320,6 +320,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             this.gBControl.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.cpbVelocity)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbDown)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbRight)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pbLeft)).EndInit();
@@ -328,7 +329,6 @@
             ((System.ComponentModel.ISupportInitialize)(this.pbAxis)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBCam)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.pBClient)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.cpbVelocity)).EndInit();
             this.ResumeLayout(false);
 
         }
