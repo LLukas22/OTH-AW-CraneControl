@@ -2,28 +2,76 @@
 
 
 \section{Kinect - C\#}
-\subsection{Kinect}
+\subsection{Konzept}
+Kinect erkennt 3 Gesten + NotTracked + Unknown
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Offen]{\includegraphics[width=0.32\textwidth]{Geste_offen.jpg}}
+    \subfigure[Geschlossen]{\includegraphics[width=0.32\textwidth]{Geste_geschlossen.jpg}}
+    \subfigure[Lasso]{\includegraphics[width=0.32\textwidth]{Geste_lasso.jpg}}
+    \caption[Kinect Gesten]{Kinect Gesten. Bildquelle: eigene Bilder}
+	\label{fig:Kinect Gesten}
+\end{figure}
+
+
+\subsection{Code}
+\subsubsection{Gestenerkennung}
+\begin{figure}[H]
+    \centering
+    \begin{tikzpicture}
+        \newcommand{\xa}{5};
+        \newcommand{\xb}{3};
+        \draw[draw=lightgray, step=1cm] (-{\xa}, -{\xa}) grid ({\xa}, {\xa});
+        \draw[thick, -latex] (-{\xa+0.5}, 0) -- ({\xa-0.5}, 0) node[below] {$x$};
+        \draw[thick, -latex] (0, -{\xa+0.5}) -- (0, {\xa-0.5}) node[right] {$y$};
+        \node [draw] at (0,{\xa+0.5}) {UP};
+        \node [draw] at (0,-{\xa-0.5}) {DOWN};
+        \node [draw] at (-{\xa-1},0) {LEFT};
+        \node [draw] at ({\xa+1},0) {RIGHT};
+        \draw [draw=red, fill=red] (0,0) -- ({\xb},{\xa}) -- ({\xa},{\xa}) -- ({\xa},{\xb}) -- cycle;
+        \draw [draw=red, fill=red] (0,0) -- (-{\xb},-{\xa}) -- (-{\xa},-{\xa}) -- (-{\xa},-{\xb}) -- cycle;
+        \draw [draw=red, fill=red] (0,0) -- ({\xb},-{\xa}) -- ({\xa},-{\xa}) -- ({\xa},-{\xb}) -- cycle;
+        \draw [draw=red, fill=red] (0,0) -- (-{\xb},{\xa}) -- (-{\xa},{\xa}) -- (-{\xa},{\xb}) -- cycle;
+    \end{tikzpicture}
+    \caption{Filter der Richtungsgesten.}
+    \label{fig:Richtungsfilter}
+\end{figure}
+\subsubsection{Kinect}
 Übernimmt die Initialiserung und Verabeitung der Kinect. Ausgegeben werden eine Bitmap des Bildes und in einem Array die Richtungsanweisungen.
 Im Bild werden die erkannten Hände umrandet.
 
-\subsection{Krahnsteuerung}
+\subsubsection{Krahnsteuerung}
 Ist das Hauptprogramm in dem das Winform und der Server gehandhabt werden.
 
-\subsection{SharedRessources}
+\subsubsection{SharedRessources}
 Klasse, in der die Übergabe an das Hauptprogramm geregelt wird, so dass dieses um andere Eingabemöglichkeiten erweitert werden könnte.
 
+\subsection{UI}
+UI
+\begin{figure}[H]
+    \centering
+        \includegraphics[width=0.7\linewidth]{Kinect UI.png}
+        \caption[Kinect UI]{Kinect UI}
+        \label{fig:Kinect UI}
+\end{figure}
+
+
+
+
+\newpage
 \section{Tensorflow - Python}
 
-TensorflowTrainer:
-    Git: \url{https://git-scm.com/downloads}
-    Suppoerted Models: \url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}
-    Microsoft C++ Build Tools: \url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16}
-    Für GPU-Support: \url{https://www.tensorflow.org/install/gpu}
+\textbf{TensorflowTrainer:} \\
+    Git: \url{https://git-scm.com/downloads}\\
+    Suppoerted Models: \url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}\\
+    Microsoft C++ Build Tools: \url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16}\\
+    Für GPU-Support: \url{https://www.tensorflow.org/install/gpu}\\
 
 
-Für PI:
-    TFLight : \url{https://www.tensorflow.org/lite/guide/python}
-    Apt.Get : sudo apt-get install python3-pil python3-pil.imagetk libatlas-base-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test
-    Pip3: pip3 install Pillow,opencv-python
+\textbf{Für PI:} \\
+    TFLight : \url{https://www.tensorflow.org/lite/guide/python}\\
+    Apt.Get : sudo apt-get install python3-pil python3-pil.imagetk libatlas-base-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test\\
+    Pip3: pip3 install Pillow,opencv-python\\
 
 

@@ -39,6 +39,8 @@
         %\usepackage{amsmath}			% Pakete fuer den Mathematikmodus
         %\usepackage{amssymb}
         \usepackage[intlimits]{empheq}
+        \usepackage{subfigure}
+        \usepackage{float}
         
         \usepackage[sc]{mathpazo}		% Schriftart Palatino fuer Haupttext und Mathematikmodus
         \usepackage{pifont}				% zusaetzliche Symbole
@@ -128,14 +130,20 @@
   \include{Implemetierung}
   \include{Vergleich}
   \include{Zusammenfassung}
-  % ... weitere Kapitel
+
   
     
-    % Abbildungsverzeichnis
-    \phantomsection
-    \addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
-    \listoffigures
-    \newpage
+  % Abbildungsverzeichnis
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+  \listoffigures
+  \newpage
+
+  %Tabellenverzeichnis
+  \phantomsection
+  \addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+  \listoftables
+  \newpage
 
   % Anhang
   %\include{anhang}
