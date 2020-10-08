@@ -103,18 +103,23 @@
 \begin{document}
   \pagenumbering{roman}
 
-  \thispagestyle{empty}			% 2. Seite wie Titelseite, aber mit zusaetzlichen Angaben
+  \thispagestyle{empty}			
   \begin{center}
+    \begin{figure}[H]
+      \centering
+      \includegraphics[width=0.7\linewidth]{OTH-Logo.jpg}
+      \label{fig:OTH-Logo}
+    \end{figure}[1cm]
     \Large
     Ostbayerische Technische Hochschule Amberg-Weiden\\
     Fakultät Elektrotechnik, Medien und Informatik\\[1cm]
     Studiengang \IhrStudiengang\\[1cm]
     \textbf{\IhreArbeit}\\[1cm]
     von\\[1cm]
-    \ErsterName\ , \ZweiterName\\[1cm]
+    \textbf{\ErsterName\ , \ZweiterName}\\[1cm]
     \textbf{\IhrTitelDE}\\[1cm]
   \end{center}
-  \vspace*{5cm}
+  \vspace*{3cm}
 
   \vspace*{1cm}
   \underbar{Professor:}\qquad\Professor
@@ -131,7 +136,12 @@
   \include{Vergleich}
   \include{Zusammenfassung}
 
-  
+   % Literaturverzeichnis
+   \phantomsection
+   \addcontentsline{toc}{chapter}{Literaturverzeichnis}
+   \bibliographystyle{natdin}
+   \bibliography{literatur}
+   \newpage
     
   % Abbildungsverzeichnis
   \phantomsection

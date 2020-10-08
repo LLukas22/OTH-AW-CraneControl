@@ -2,7 +2,8 @@
 
 
 \section{Zielsetzung}
-Mit der Kinect 2.0 oder eine Raspberry Pi mit Kamera sollen 2 Möglichkeiten zur Verbesserung der Gestensteuerung des Krans im Labor, Abbildung 1.1, implementiert werden.
+Mit der Kinect 2.0 oder eine Raspberry Pi mit Kamera sollen 2 Möglichkeiten zur Verbesserung der Gestensteuerung des Krans im Labor, 
+Abbildung 1.1, implementiert werden.
 
 \section{Kinect}
 \begin{figure}[H]
@@ -12,15 +13,23 @@ Mit der Kinect 2.0 oder eine Raspberry Pi mit Kamera sollen 2 Möglichkeiten zur
 	\label{fig:pi4}
 \end{figure}
 
-Das Kinect 2.0 Modul von Microsoft ermöglicht die kostengünstige Verarbeitung von Tiefenbildern und ist prädestiniert für einen Einsatz zur Gestensteuerung. Die Kinect 2.0 enthält hierfür eine 3D-Tiefenkamera mit einer Auflösung von 512 x 484 Pixel und verarbeitet ca. 2 Gigabit Daten pro Sekunde, um die Umgebung zu scannen. Es besteht hier die Möglichkeit, bis zu 6 Skelette gleichzeitig zu erfassen, bei denen beispielsweise die Herzfrequenz, einzelne Mimiken, Gewichtsverlagerungen und jeweils bis zu 25 einzelne Gelenkpunkte erkannt werden können. Zur Programmierung stellt Microsoft ein umfangreiches Software Developer Kit SDK 2.0 zu Verfügung. Es besteht Zugriff auf alle verbauten Sensoren, inklusive dem Infrarot-Sensor und Mikrofon. Zur Umsetzung der Gestensteuerung ist „Skeletal Tracking“ integriert, das auch die Nachverfolgung von Bewegung mit Hilfe eines Rasters erlaubt.
+Das Kinect 2.0 Modul von Microsoft ermöglicht die kostengünstige Verarbeitung von Tiefenbildern und ist prädestiniert für einen Einsatz 
+zur Gestensteuerung. Die Kinect 2.0 enthält hierfür eine 3D-Tiefenkamera mit einer Auflösung von 512 x 484 Pixel und verarbeitet 
+ca. 2 Gigabit Daten pro Sekunde, um die Umgebung zu scannen. Es besteht hier die Möglichkeit, bis zu 6 Skelette gleichzeitig zu erfassen, 
+bei denen beispielsweise die Herzfrequenz, einzelne Mimiken, Gewichtsverlagerungen und jeweils bis zu 25 einzelne Gelenkpunkte erkannt werden können. 
+Zur Programmierung stellt Microsoft ein umfangreiches Software Developer Kit SDK 2.0 zu Verfügung. Es besteht Zugriff auf alle verbauten Sensoren, 
+inklusive dem Infrarot-Sensor und Mikrofon. Zur Umsetzung der Gestensteuerung ist „Skeletal Tracking“ integriert, das auch die Nachverfolgung von 
+Bewegung mit Hilfe eines Rasters erlaubt.
 
 \section{Tensorflow}
 
 \section{Anforderungen}
 Es sollen Gesten für folgende Betriebsmodi implementiert werden.
--	Bewegung nach rechts mit Beschleungiungskurve
--	Bewegung nach links mit Beschleungiungskurve
--	Bewegung nach oben 
--	Bewegung nach unten
--	Freischalten der Betriebsmodi
--	Zu- und Abschalten der Regelung für Rechts- und Linksbewegung
+\begin{itemize}
+	\item Bewegung nach rechts mit Beschleungiungskurve
+	\item Bewegung nach links mit Beschleungiungskurve
+	\item Bewegung nach oben 
+	\item Bewegung nach unten
+	\item Freischalten der Betriebsmodi
+	\item Zu- und Abschalten der Regelung für Rechts- und Linksbewegung
+\end{itemize}
