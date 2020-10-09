@@ -7,11 +7,11 @@ namespace TensorflowInstallationScript.Scripts
 {
 	public class Xml_to_Csv : BaseScript
 	{
-		private readonly DirectoryPaths directoryPaths;
+		private readonly Paths paths;
 
-		public Xml_to_Csv(DirectoryPaths directoryPaths)
+		public Xml_to_Csv(Paths paths)
 		{
-			this.directoryPaths = directoryPaths;
+			this.paths = paths;
 		}
 
 		public void Execute()
@@ -19,8 +19,8 @@ namespace TensorflowInstallationScript.Scripts
 			Exception exception = null;
 			try
 			{
-				GenerateCSV(Path.Combine(directoryPaths.Images, @"test"), directoryPaths.Images, "test_labels.csv");
-				GenerateCSV(Path.Combine(directoryPaths.Images, @"train"), directoryPaths.Images, "train_labels.csv");
+				GenerateCSV(Path.Combine(paths.Images, @"test"), paths.Images, "test_labels.csv");
+				GenerateCSV(Path.Combine(paths.Images, @"train"), paths.Images, "train_labels.csv");
 			}
 			catch (Exception ex)
 			{

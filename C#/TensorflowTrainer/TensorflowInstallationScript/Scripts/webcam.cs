@@ -1,104 +1,76 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System;
+using System.Collections.Generic;
+using System.Text;
 
 namespace TensorflowInstallationScript.Scripts
 {
 	public class Webcam : BaseScript
 	{
-		public Webcam(DirectoryPaths directoryPaths, List<string> Objects)
+		public Webcam()
 		{
 			ScriptName = "webcam.py";
-
 			Script = @"
-import numpy as np
+
 import os
-import six.moves.urllib as urllib
-import sys
-import tarfile
 import tensorflow as tf
-import zipfile
-import cv2
-
-from collections import defaultdict
-from io import StringIO
-from matplotlib import pyplot as plt
-from PIL import Image
 from object_detection.utils import label_map_util
-from object_detection.utils import visualization_utils as vis_util
+from object_detection.utils import visualization_utils as viz_utils
+import cv2
+import matplotlib.pyplot as plt
+import numpy as np
 
-cap = cv2.VideoCapture(0 + cv2.CAP_DSHOW) 
-
-PATH_TO_CKPT = "+CleanUpPath(Path.Combine(directoryPaths.FrozenGraph, "frozen_inference_graph.pb"))+@"
-PATH_TO_LABELS = "+CleanUpPath(Path.Combine(directoryPaths.Training, "labelmap.pbtxt"))+ @"
-NUM_CLASSES = "+ Objects.Count + @"
-
-
-# Load a (frozen) Tensorflow model into memory.
-detection_graph = tf.Graph()
-with detection_graph.as_default():
-    od_graph_def = tf.compat.v1.GraphDef()
-    with tf.io.gfile.GFile(PATH_TO_CKPT, 'rb') as fid:
-        serialized_graph = fid.read()
-        od_graph_def.ParseFromString(serialized_graph)
-        tf.import_graph_def(od_graph_def, name = '')
-
-label_map = label_map_util.load_labelmap(PATH_TO_LABELS)
-categories = label_map_util.convert_label_map_to_categories(
-    label_map, max_num_classes = NUM_CLASSES, use_display_name = True)
-category_index = label_map_util.create_category_index(categories)
-
-def load_image_into_numpy_array(image):
-    (im_width, im_height) = image.size
-    return np.array(image.getdata()).reshape(
-        (im_height, im_width, 3)).astype(np.uint8)
+RESOLUTION = (1280, 720)
+PATH_TO_SAVED_MODEL = 'export/normal/saved_model'
+PATH_TO_LABELS = 'training/labelmap.pbtxt'
+MIN_SCORE_THRESH = 0.6
 
 
-with detection_graph.as_default():
-    config = tf.ConfigProto()
-    config.gpu_options.allow_growth = True
-    config.gpu_options.per_process_gpu_memory_fraction = 0.3
-    with tf.compat.v1.Session(graph = detection_graph, config = config) as sess:
-        while True:
-            # Read frame from camera
-            ret, image_np = cap.read()
-            # Expand dimensions since the model expects images to have shape: [1, None, None, 3]
-            image_np_expanded = np.expand_dims(image_np, axis = 0)
-            # Extract image tensor
-            image_tensor = detection_graph.get_tensor_by_name('image_tensor:0')
-            # Extract detection boxes
-            boxes = detection_graph.get_tensor_by_name('detection_boxes:0')
-            # Extract detection scores
-            scores = detection_graph.get_tensor_by_name('detection_scores:0')
-            # Extract detection classes
-            classes = detection_graph.get_tensor_by_name('detection_classes:0')
-            # Extract number of detectionsd
-            num_detections = detection_graph.get_tensor_by_name(
-                'num_detections:0')
-# Actual detection.
-            (boxes, scores, classes, num_detections) = sess.run(
-                [boxes, scores, classes, num_detections],
-                feed_dict ={ image_tensor: image_np_expanded})
-            # Visualization of the results of a detection.
-            vis_util.visualize_boxes_and_labels_on_image_array(
-                image_np,
-                np.squeeze(boxes),
-                np.squeeze(classes).astype(np.int32),
-                np.squeeze(scores),
-                category_index,
-                use_normalized_coordinates = True,
-                line_thickness = 8)
+model = os.path.join(os.getcwd(), PATH_TO_SAVED_MODEL)
+labels = os.path.join(os.getcwd(), PATH_TO_LABELS)
+# Enable GPU dynamic memory allocation
+gpus = tf.config.experimental.list_physical_devices('GPU')
+for gpu in gpus:
+    tf.config.experimental.set_memory_growth(gpu, True)
+    
 
-            # Display output
-            cv2.imshow('object detection', image_np)
 
-            if cv2.waitKey(25) & 0xFF == ord('q'):
-                cv2.destroyAllWindows()
-                break";
-		}
+detect_fn = tf.saved_model.load(model)
+category_index = label_map_util.create_category_index_from_labelmap(labels,use_display_name=True)
+cap = cv2.VideoCapture(0  + cv2.CAP_DSHOW)
+ret = cap.set(3, RESOLUTION[0])
+ret = cap.set(4, RESOLUTION[1])
+while(True):
+    (status, frame) = cap.read()
+    input_tensor = tf.convert_to_tensor(frame)
+    input_tensor = input_tensor[tf.newaxis, ...]
+    detections = detect_fn(input_tensor)
+    num_detections = int(detections.pop('num_detections'))
+    detections = {key: value[0, :num_detections].numpy()
+                   for key, value in detections.items()}
+    detections['num_detections'] = num_detections
 
-		private string CleanUpPath(string input)
-		{
-			return "'" + input.Replace(@"\", "/") + "'";
+    # detection_classes should be ints.
+    detections['detection_classes'] = detections['detection_classes'].astype(np.int64)
+
+    image_np_with_detections = frame.copy()
+
+    viz_utils.visualize_boxes_and_labels_on_image_array(
+          image_np_with_detections,
+          detections['detection_boxes'],
+          detections['detection_classes'],
+          detections['detection_scores'],
+          category_index,
+          use_normalized_coordinates=True,
+          max_boxes_to_draw=10,
+          min_score_thresh=MIN_SCORE_THRESH,
+          agnostic_mode=False)
+
+    cv2.imshow('image',image_np_with_detections)
+    if cv2.waitKey(1) & 0xFF == ord('q'):
+        break
+cap.release()
+cv2.destroyAllWindows()
+";
 		}
 	}
 }

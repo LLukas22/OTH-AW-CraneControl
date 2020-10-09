@@ -18,16 +18,15 @@ namespace TensorflowInstallationScript
 {
 	public partial class MainForm : Form
 	{
-		private const double TestingToTrainingRatio = 0.20;
+		
 		private CommandLineWrapper.CommandLineWrapper cmdWrapper;
-		private DirectoryPaths directoryPaths;
 		private DownloadManager downloadManager;
 		private IEventAggregator eventAggregator;
 		private readonly string neuralNetFile = @"Downloads/neuralNet.tar.gz";
 		private readonly string objectDetectionFile = @"Downloads/objectDetectionApi.zip";
-		private readonly string protocbufFile = @"Downloads/protobuf.zip";
-		private readonly ConcurrentBag<Process> runningProcesses = new ConcurrentBag<Process>();
-		private Settings settings;
+		private readonly string protbufFile = @"Downloads/protobuf.zip";
+		private readonly ConcurrentDictionary<int,Process> runningProcesses = new ConcurrentDictionary<int, Process>();
+		public Settings Settings;
 		private readonly SettingsManager settingsManager = new SettingsManager();
 
 		public MainForm()
@@ -39,16 +38,16 @@ namespace TensorflowInstallationScript
 		public void Subscribe()
 		{
 			
-			eventAggregator.GetEvent<OutputChangedEvent>().Subscribe(RefreshOutputs, ThreadOption.BackgroundThread);
-			eventAggregator.GetEvent<ErrorChangedEvent>().Subscribe(RefreshErrors, ThreadOption.BackgroundThread);
-			eventAggregator.GetEvent<ProcessCompletedEvent>().Subscribe(RemoveProcess, ThreadOption.BackgroundThread);
-			eventAggregator.GetEvent<ProcessStartedEvent>().Subscribe(AddProcess, ThreadOption.BackgroundThread);
+			eventAggregator.GetEvent<OutputChangedEvent>().Subscribe(RefreshOutputs, ThreadOption.UIThread);
+			eventAggregator.GetEvent<ErrorChangedEvent>().Subscribe(RefreshOutputs, ThreadOption.UIThread);
+			eventAggregator.GetEvent<ProcessCompletedEvent>().Subscribe(RemoveProcess, ThreadOption.UIThread);
+			eventAggregator.GetEvent<ProcessStartedEvent>().Subscribe(AddProcess, ThreadOption.UIThread);
 		}
 
 		public void Unsubscribe()
 		{
 			eventAggregator.GetEvent<OutputChangedEvent>().Unsubscribe(RefreshOutputs);
-			eventAggregator.GetEvent<ErrorChangedEvent>().Subscribe(RefreshErrors);
+			eventAggregator.GetEvent<ErrorChangedEvent>().Unsubscribe(RefreshOutputs);
 			eventAggregator.GetEvent<ProcessCompletedEvent>().Unsubscribe(RemoveProcess);
 			eventAggregator.GetEvent<ProcessStartedEvent>().Unsubscribe(AddProcess);
 		}
@@ -58,70 +57,45 @@ namespace TensorflowInstallationScript
 			eventAggregator = new EventAggregator();
 			cmdWrapper = new CommandLineWrapper.CommandLineWrapper(eventAggregator);
 			downloadManager = new DownloadManager(eventAggregator);
-
 			Subscribe();
-
-
-			settings = settingsManager.Load();
-			directoryTextBox.Text = settings.Directory;
-			objectTextBox.Text = settings.Objects;
-			directoryPaths = new DirectoryPaths(settings.Directory);
-
-			string masterHttps = "https://github.com/tensorflow/models/archive/master.zip";
-			downloadManager.RegisterFile(objectDetectionFile,
-				new Uri(masterHttps), objectDetectionStateLabel);
-			downloadManager.RegisterFile(neuralNetFile,
-				new Uri(
-					"http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz"),
-				neuralNetLabel);
-			downloadManager.RegisterFile(protocbufFile,
-				new Uri(
-					"https://github.com/protocolbuffers/protobuf/releases/download/v3.11.2/protoc-3.11.2-win64.zip"),
-				protobufstate);
-
+			Settings = settingsManager.Load();
+			Settings.RegisterDirectoryTextBox(directoryTextBox).RegisterObjectsToDetectTextBox(objectTextBox).Initialize();
+			downloadManager.RegisterFile(objectDetectionFile, new Uri(Settings.ApiUrl), objectDetectionStateLabel);
+			downloadManager.RegisterFile(neuralNetFile, new Uri(Settings.ModelUrl), neuralNetLabel);
+			downloadManager.RegisterFile(protbufFile, new Uri(Settings.ProtbufUrl), protobufLabel);
 			downloadManager.CheckFile(objectDetectionFile);
 			downloadManager.CheckFile(neuralNetFile);
-			downloadManager.CheckFile(protocbufFile);
-
-
-			//Combobox init
-			NetSelector.DisplayMember = "Name";
-			NetSelector.ValueMember = "Id";
-			NetSelector.Items.Add(new DropDownMenuItem {Name = "ssd_mobilenet_v2 (fast)", Id = 1});
-			NetSelector.SelectedIndex = 0;
-		}
-
-		public List<string> SplitObjects()
-		{
-			return objectTextBox.Text.Trim().Split(';').ToList();
+			downloadManager.CheckFile(protbufFile);
 		}
 
 		public void CleanUpProcesses()
 		{
-			foreach (var item in runningProcesses) item.Close();
-
-			foreach (var Proc in Process.GetProcesses())
-				if (Proc.ProcessName.Equals("py.exe") || Proc.ProcessName.Equals("python") ||
-				    Proc.ProcessName.Equals("python.exe")) //Process Python?
-					Proc.Kill();
-
+			foreach (var item in runningProcesses)
+			{
+				item.Value.Close();
+			}
+			runningProcesses.Clear();
 		}
 
 		#region Events
 
 		private void AddProcess(Process obj)
 		{
-			runningProcesses.Add(obj);
+			
+			runningProcesses.TryAdd(obj.Id,obj);
 		}
 
 		private void RemoveProcess(Process obj)
 		{
-			if (runningProcesses.Any(x => x == obj)) runningProcesses.TryTake(out obj);
+			if (runningProcesses.ContainsKey(obj.Id))
+			{
+				runningProcesses.TryRemove(obj.Id, out _);
+			}
 		}
 
 		private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
 		{
-			settingsManager.Save(settings);
+			settingsManager.Save(Settings);
 			Unsubscribe();
 			CleanUpProcesses();
 		}
@@ -130,26 +104,10 @@ namespace TensorflowInstallationScript
 		private void RefreshOutputs(string obj)
 		{
 			if (obj == null) return;
-			if (InvokeRequired)
-				Invoke(new Action<string>(RefreshOutputs), obj);
-			else
-				STDOUT.AppendText($"{obj}{Environment.NewLine}");
+			STDOUT.AppendText($"{obj}{Environment.NewLine}");
 		}
 
-		private void RefreshErrors(string obj)
-		{
-			if (obj == null) return;
-			if (InvokeRequired)
-				Invoke(new Action<string>(RefreshErrors), obj);
-			else
-				STDOUT.AppendText($"{obj}{Environment.NewLine}");
-		}
-
-		private void objectTextBox_TextChanged(object sender, EventArgs e)
-		{
-			settings.Objects = objectTextBox.Text;
-		}
-
+		
 		#endregion
 
 		#region ButtonClicks
@@ -172,22 +130,17 @@ namespace TensorflowInstallationScript
 
 			Commands.Add("python -m pip install --upgrade pip");
 			Commands.Add("pip install matplotlib");
-			//Commands.Add("pip install numpy==1.16");
 			Commands.Add("pip install jupyter");
 			Commands.Add("pip install pandas");
 			Commands.Add("pip install opencv-python");
 			Commands.Add("pip install Cython");
 			Commands.Add("pip install pillow");
 			Commands.Add("pip install lxml");
-			Commands.Add("pip install pip-autoremove");
-			
 			Commands.Add("pip install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI");
 
 			if (box_gpuSupport.CheckState == CheckState.Checked)
-				//Commands.Add("pip install tensorflow-gpu=1.15.3");
 				Commands.Add("pip install tensorflow-gpu");
 			else
-				//Commands.Add("pip install tensorflow==1.15.3");
 				Commands.Add("pip install tensorflow");
 
 			Commands.Add("pip install tf-models-official");
@@ -206,9 +159,13 @@ namespace TensorflowInstallationScript
 		{
 			var dialogue = new FolderBrowserDialog();
 			var result = dialogue.ShowDialog();
-			if (result == DialogResult.OK) directoryTextBox.Text = dialogue.SelectedPath;
-			settings.Directory = dialogue.SelectedPath;
-			directoryPaths = new DirectoryPaths(settings.Directory);
+			if (result == DialogResult.OK)
+			{
+				directoryTextBox.Text = dialogue.SelectedPath;
+				Settings.MainDirectory = dialogue.SelectedPath;
+				Settings.Initialize();
+			}
+			
 		}
 
 		private void btn_DownloadObjectDetectionAPI_Click(object sender, EventArgs e)
@@ -218,27 +175,20 @@ namespace TensorflowInstallationScript
 
 		private void btn_DownloadNeuralNet_Click(object sender, EventArgs e)
 		{
-			var uri = string.Empty;
-
-			//Old Model
-			//uri = "http://download.tensorflow.org/models/object_detection/ssd_mobilenet_v2_coco_2018_03_29.tar.gz";
-			uri =
-				"http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_fpnlite_640x640_coco17_tpu-8.tar.gz";
-			downloadManager.RegisterFile(neuralNetFile, new Uri(uri), neuralNetLabel);
 			downloadManager.Download(neuralNetFile);
 		}
 
 
 		private void btn_DownloadProtobuf_Click(object sender, EventArgs e)
 		{
-			downloadManager.Download(protocbufFile);
+			downloadManager.Download(protbufFile);
 		}
 
 
 		private void btn_Unzip_Click(object sender, EventArgs e)
 		{
-			new DirectoryCreator(directoryPaths, objectDetectionFile, neuralNetFile, protocbufFile).BuildDirectory(
-				settings.Directory);
+			new DirectoryCreator(Settings.Directories, objectDetectionFile, neuralNetFile, protbufFile).BuildDirectory(
+				Settings.MainDirectory);
 		}
 
 
@@ -248,9 +198,9 @@ namespace TensorflowInstallationScript
 
 			var Commands = new List<string>();
 
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
+			Commands.Add($"{Settings.Directories.DriveLetter}");
 
-			Commands.Add($"cd {directoryPaths.Research}");
+			Commands.Add($"cd {Settings.Directories.Research}");
 
 			Commands.Add($"{protocPath} {@".\object_detection\protos\*.proto"} --python_out=.");
 
@@ -259,7 +209,7 @@ namespace TensorflowInstallationScript
 
 		private void btn_InstallObjectDetectionAPI_Click(object sender, EventArgs e)
 		{
-			var setupPath = directoryPaths.Research;
+			var setupPath = Settings.Directories.Research;
 
 			var Commands = new List<string>();
 
@@ -267,13 +217,17 @@ namespace TensorflowInstallationScript
 
 			Commands.Add($"cd {setupPath}");
 
+			Commands.Add($"cp {Path.Combine(Settings.Directories.ObjectDetection, @"packages\tf2","setup.py")}");
+				
 			Commands.Add($"python setup.py build");
 
 			Commands.Add($"python setup.py install");
 
-			Commands.Add($"cd {Path.Combine(setupPath,"slim")}");
+			//TF1 only
+			//Commands.Add($"cd {Path.Combine(setupPath,"slim")}");
+			//Commands.Add($"pip install -e .");
 
-			Commands.Add($"pip install -e .");
+			Commands.Add($"python object_detection/builders/model_builder_tf2_test.py");
 
 			cmdWrapper.Execute(Commands);
 		}
@@ -282,10 +236,10 @@ namespace TensorflowInstallationScript
 		{
 			if (File.Exists(objectDetectionFile)) File.Delete(objectDetectionFile);
 			if (File.Exists(neuralNetFile)) File.Delete(neuralNetFile);
-			if (File.Exists(protocbufFile)) File.Delete(protocbufFile);
+			if (File.Exists(protbufFile)) File.Delete(protbufFile);
 			neuralNetLabel.Text = "State: Missing";
 			objectDetectionStateLabel.Text = "State: Missing";
-			protobufstate.Text = "State: Missing";
+			protobufLabel.Text = "State: Missing";
 		}
 
 		private void btn_Clear_Click(object sender, EventArgs e)
@@ -296,17 +250,17 @@ namespace TensorflowInstallationScript
 
 		private void btn_XmlToCsv_Click(object sender, EventArgs e)
 		{
-			Directory.Delete(Path.Combine(directoryPaths.Images, @"train"), true);
-			Directory.Delete(Path.Combine(directoryPaths.Images, @"test"), true);
-			Directory.CreateDirectory(Path.Combine(directoryPaths.Images, @"test"));
-			Directory.CreateDirectory(Path.Combine(directoryPaths.Images, @"train"));
-			Directory.CreateDirectory(Path.Combine(directoryPaths.Images, @"input"));
+			Directory.Delete(Path.Combine(Settings.Directories.Images, @"train"), true);
+			Directory.Delete(Path.Combine(Settings.Directories.Images, @"test"), true);
+			Directory.CreateDirectory(Path.Combine(Settings.Directories.Images, @"test"));
+			Directory.CreateDirectory(Path.Combine(Settings.Directories.Images, @"train"));
+			Directory.CreateDirectory(Path.Combine(Settings.Directories.Images, @"input"));
 			var random = new Random();
 
 			Task.Run(() =>
 			{
-				var images = Directory.GetFiles(Path.Combine(directoryPaths.Images, @"input"), "*.xml").ToList();
-				var TestingFilesCount = (int) (images.Count * TestingToTrainingRatio);
+				var images = Directory.GetFiles(Path.Combine(Settings.Directories.Images, @"input"), "*.xml").ToList();
+				var TestingFilesCount = (int) (images.Count * Settings.TrainToEvaluateRatio);
 				for (var i = 0; i < TestingFilesCount; i++)
 				{
 					var xmlfile = images.ElementAt(random.Next(0, images.Count - 1));
@@ -314,15 +268,15 @@ namespace TensorflowInstallationScript
 					var pngFile = Path.ChangeExtension(xmlfile, "png");
 					if (File.Exists(jpgFile))
 					{
-						File.Copy(xmlfile, Path.Combine(directoryPaths.Images, @"test", Path.GetFileName(xmlfile)));
-						File.Copy(jpgFile, Path.Combine(directoryPaths.Images, @"test", Path.GetFileName(jpgFile)));
+						File.Copy(xmlfile, Path.Combine(Settings.Directories.Images, @"test", Path.GetFileName(xmlfile)));
+						File.Copy(jpgFile, Path.Combine(Settings.Directories.Images, @"test", Path.GetFileName(jpgFile)));
 						images.Remove(xmlfile);
 					}
 
 					else if (File.Exists(pngFile))
 					{
-						File.Copy(xmlfile, Path.Combine(directoryPaths.Images, @"test", Path.GetFileName(xmlfile)));
-						File.Copy(pngFile, Path.Combine(directoryPaths.Images, @"test", Path.GetFileName(pngFile)));
+						File.Copy(xmlfile, Path.Combine(Settings.Directories.Images, @"test", Path.GetFileName(xmlfile)));
+						File.Copy(pngFile, Path.Combine(Settings.Directories.Images, @"test", Path.GetFileName(pngFile)));
 						images.Remove(xmlfile);
 					}
 				}
@@ -334,31 +288,31 @@ namespace TensorflowInstallationScript
 					var pngFile = Path.ChangeExtension(xmlfile, "png");
 					if (File.Exists(jpgFile))
 					{
-						File.Copy(xmlfile, Path.Combine(directoryPaths.Images, @"train", Path.GetFileName(xmlfile)));
-						File.Copy(jpgFile, Path.Combine(directoryPaths.Images, @"train", Path.GetFileName(jpgFile)));
+						File.Copy(xmlfile, Path.Combine(Settings.Directories.Images, @"train", Path.GetFileName(xmlfile)));
+						File.Copy(jpgFile, Path.Combine(Settings.Directories.Images, @"train", Path.GetFileName(jpgFile)));
 					}
 					else if (File.Exists(pngFile))
 					{
-						File.Copy(xmlfile, Path.Combine(directoryPaths.Images, @"train", Path.GetFileName(xmlfile)));
-						File.Copy(pngFile, Path.Combine(directoryPaths.Images, @"train", Path.GetFileName(pngFile)));
+						File.Copy(xmlfile, Path.Combine(Settings.Directories.Images, @"train", Path.GetFileName(xmlfile)));
+						File.Copy(pngFile, Path.Combine(Settings.Directories.Images, @"train", Path.GetFileName(pngFile)));
 					}
 				}
 			}).Wait();
 
-			var xml = new Xml_to_Csv(directoryPaths);
+			var xml = new Xml_to_Csv(Settings.Directories);
 			xml.Execute();
 		}
 
 		private void btn_tfRecord_Click(object sender, EventArgs e)
 		{
-			var tfrecords = new GenerateTfRecord(SplitObjects());
-			tfrecords.WriteScript(directoryPaths.ObjectDetection);
+			var tfrecords = new GenerateTfRecord(Settings.SplitObjectsToDetect);
+			tfrecords.WriteScript(Settings.Directories.ObjectDetection);
 
 			var Commands = new List<string>();
 
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
+			Commands.Add($"{Settings.Directories.DriveLetter}");
 
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
 
 			Commands.Add(
 				$@"{tfrecords.ScriptName} --csv_input=images\train_labels.csv --image_dir=images\train --output_path=train.record");
@@ -374,8 +328,8 @@ namespace TensorflowInstallationScript
 			Exception exception = null;
 			try
 			{
-				var labelmap = new GenerateLabelmap(SplitObjects());
-				labelmap.WriteScript(directoryPaths.Training);
+				var labelmap = new GenerateLabelmap(Settings.SplitObjectsToDetect);
+				labelmap.WriteScript(Settings.Directories.Training);
 			}
 			catch (Exception ex)
 			{
@@ -395,8 +349,8 @@ namespace TensorflowInstallationScript
 			Exception exception = null;
 			try
 			{
-				var pipeline = new Pipeline(directoryPaths, SplitObjects());
-				pipeline.WriteScript(directoryPaths.Training);
+				var pipeline = new Pipeline(Settings.Directories, Settings.SplitObjectsToDetect);
+				pipeline.WriteScript(Settings.Directories.Training);
 			}
 			catch (Exception ex)
 			{
@@ -413,15 +367,6 @@ namespace TensorflowInstallationScript
 
 		private void btn_Start_Click(object sender, EventArgs e)
 		{
-
-			CleanUpProcesses();
-
-			//var train = new Train(directoryPaths);
-			//train.WriteScript(directoryPaths.ObjectDetection);
-			//MessageBoxHelper.Info($"Wrote Training Script! Please Execute: {Path.Combine(directoryPaths.ObjectDetection, train.ScriptName)}");
-
-
-
 			//TODO: Allow Growth in model_main_tf2.py
 
 			//gpus = tf.config.experimental.list_physical_devices('GPU')
@@ -433,9 +378,9 @@ namespace TensorflowInstallationScript
 			//		print(e)
 
 			var Commands = new List<string>();
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
-			Commands.Add($"model_main_tf2.py --model_dir={directoryPaths.Training} --num_train_steps=50000 --sample_1_of_n_eval_examples=1 --pipeline_config_path={Path.Combine(directoryPaths.Training, "customPipeline.config")} --alsologtostderr");
+			Commands.Add($"{Settings.Directories.DriveLetter}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
+			Commands.Add($"model_main_tf2.py --model_dir={Settings.Directories.Training} --num_train_steps=50000 --sample_1_of_n_eval_examples=1 --pipeline_config_path={Path.Combine(Settings.Directories.Training, "customPipeline.config")} --alsologtostderr");
 			cmdWrapper.Execute(Commands);
 		}
 
@@ -443,8 +388,8 @@ namespace TensorflowInstallationScript
 		private void btn_Tesnorboard_Click(object sender, EventArgs e)
 		{
 			var Commands = new List<string>();
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
+			Commands.Add($"{Settings.Directories.DriveLetter}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
 			Commands.Add("tensorboard --logdir=training");
 
 			cmdWrapper.Execute(Commands);
@@ -458,111 +403,39 @@ namespace TensorflowInstallationScript
 
 		private void btn_ExportGraph_Click(object sender, EventArgs e)
 		{
-			var export = new Exportgraph(directoryPaths);
-			export.WriteScript(directoryPaths.ObjectDetection);
-			var list = Directory.GetFiles(directoryPaths.Training);
-			string name = "";
-			int lastindex = 0;
-			foreach (var file in list)
-			{
-				if (file.Contains("data-00000-of-00001"))
-				{
-					var index = int.Parse(file.Substring(file.IndexOf('-')+1,
-						file.IndexOf('.', file.IndexOf('.') + 1) - file.IndexOf('-') -1));
-					if (lastindex < index)
-					{
-						name = Path.GetFileName( file.Substring(0, file.IndexOf('.', file.IndexOf('.') + 1)));
-						lastindex = index;
-					}
-				}
-			}
-			if(Directory.Exists(Path.Combine(directoryPaths.ObjectDetection, "inference_graph")))
-				Directory.Delete(Path.Combine(directoryPaths.ObjectDetection, "inference_graph"),true);
-			Directory.CreateDirectory(Path.Combine(directoryPaths.ObjectDetection, "inference_graph"));
-
 			var Commands = new List<string>();
-
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
-
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
-
-			Commands.Add(
-				$"{export.ScriptName} --input_type image_tensor --pipeline_config_path training/customPipeline.config --trained_checkpoint_prefix training/{name} --output_directory inference_graph");
-
+			Commands.Add($"{Settings.Directories.DriveLetter}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
+			Commands.Add($"python exporter_main_v2.py --input_type image_tensor --pipeline_config_path training/customPipeline.config --trained_checkpoint_dir training --output_directory export/normal");
 			cmdWrapper.Execute(Commands);
 		}
 
-		private void btn_ExportLightGraph_Click(object sender, EventArgs e)
+		private void btn_ExportLiteGraph_Click(object sender, EventArgs e)
 		{
-			var exportLight = new ExportOptimicedGraph(directoryPaths);
-			exportLight.WriteScript(directoryPaths.ObjectDetection);
-			var list = Directory.EnumerateFiles(directoryPaths.Training);
-			var file = new FileInfo(list.LastOrDefault(x => x.Contains("data-00000-of-00001"))).Name;
-			var name = file.Substring(0, file.IndexOf('.', file.IndexOf('.') + 1));
-
 			var Commands = new List<string>();
-
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
-
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
-
-			Commands.Add(
-				$"{exportLight.ScriptName} --pipeline_config_path training/customPipeline.config --trained_checkpoint_prefix training/{name} --output_directory light_graph --add_postprocessing_op True");
-
-			Commands.Add(
-				"tflite_convert --graph_def_file=light_graph/tflite_graph.pb --output_file=light_graph/detect.tflite --output_format=TFLITE --input_shapes=1,300,300,3 --input_arrays=normalized_input_image_tensor --output_arrays=TFLite_Detection_PostProcess,TFLite_Detection_PostProcess:1,TFLite_Detection_PostProcess:2,TFLite_Detection_PostProcess:3 --post_training_quantize --inference_type=QUANTIZED_UINT8 --mean_values=128 --std_dev_values=128 --change_concat_input_ranges=false --allow_custom_ops");
-
+			Commands.Add($"{Settings.Directories.DriveLetter}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
+			Commands.Add($"python export_tflite_graph_tf2.py --pipeline_config_path training/customPipeline.config --trained_checkpoint_dir training --output_directory  export/LiteConvertibleGraph");
 			cmdWrapper.Execute(Commands);
 		}
 
 		private void btn_WebcamDemo_Click(object sender, EventArgs e)
 		{
-			var webcam = new Webcam(directoryPaths, SplitObjects());
-			webcam.WriteScript(directoryPaths.ObjectDetection);
+			var webcam = new Webcam();
+			webcam.WriteScript(Settings.Directories.ObjectDetection);
 			var Commands = new List<string>();
-			Commands.Add($"{Path.GetPathRoot(directoryTextBox.Text).Replace(@"\", string.Empty)}");
-			Commands.Add($"cd {directoryPaths.ObjectDetection}");
-			Commands.Add($"{webcam.ScriptName}");
-
+			Commands.Add($"{Settings.Directories.DriveLetter}");
+			Commands.Add($"cd {Settings.Directories.ObjectDetection}");
+			Commands.Add($"python webcam.py");
 			cmdWrapper.Execute(Commands);
 		}
 
 
 		private void btn_OpenFolderinExplorer_Click(object sender, EventArgs e)
 		{
-			Process.Start("explorer.exe", directoryPaths.ObjectDetection);
+			Process.Start("explorer.exe", Settings.Directories.ObjectDetection);
 		}
 
-
-		private void btn_ExportAll_Click(object sender, EventArgs e)
-		{
-			var dialogue = new FolderBrowserDialog();
-			var result = dialogue.ShowDialog();
-			if (result == DialogResult.OK)
-			{
-				if (File.Exists(Path.Combine(directoryPaths.FrozenGraph, "frozen_inference_graph.pb")))
-				{
-					File.Copy(Path.Combine(directoryPaths.FrozenGraph, "frozen_inference_graph.pb"),Path.Combine(dialogue.SelectedPath, "frozen_inference_graph.pb"),true);
-				}
-
-				if (File.Exists(Path.Combine(directoryPaths.LiteGraph, "detect.tflite")))
-				{
-					File.Copy(Path.Combine(directoryPaths.LiteGraph, "detect.tflite"), Path.Combine(dialogue.SelectedPath, "detect.tflite"), true);
-				}
-
-				if (File.Exists(Path.Combine(directoryPaths.Training, "labelmap.pbtxt")))
-				{
-					File.Copy(Path.Combine(directoryPaths.Training, "labelmap.pbtxt"), Path.Combine(dialogue.SelectedPath, "labelmap.pbtxt"), true);
-				}
-
-				if (SplitObjects().Count > 0)
-				{
-					File.WriteAllLines(Path.Combine(dialogue.SelectedPath, "labelmap.txt"),SplitObjects());
-				}
-				MessageBoxHelper.Info("Export Complete!");
-			}
-			
-		}
 
 		private void Prerequisits_Label_Click(object sender, EventArgs e)
 		{
@@ -580,9 +453,6 @@ namespace TensorflowInstallationScript
 
 			);
 		}
-
 		#endregion
-
-
 	}
 }

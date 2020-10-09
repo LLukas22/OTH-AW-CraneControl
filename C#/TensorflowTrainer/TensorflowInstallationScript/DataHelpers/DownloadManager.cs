@@ -29,7 +29,7 @@ namespace TensorflowInstallationScript.DataHelpers
 
 		private void OnDownloadProgressChanged(object sender, DownloadProgressChangedEventArgs e)
 		{
-			activeLabel.Text = $"Status: Downloading({e.ProgressPercentage}%)";
+			activeLabel.Text = $"Status: {e.ProgressPercentage}%";
 		}
 
 		private void WebClientOnDownloadFileCompleted(object sender, AsyncCompletedEventArgs e)

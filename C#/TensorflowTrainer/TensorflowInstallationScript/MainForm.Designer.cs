@@ -38,7 +38,7 @@
 			this.btn_downloadspecififcmodel = new System.Windows.Forms.Button();
 			this.neuralNetLabel = new System.Windows.Forms.Label();
 			this.btn_protobuf = new System.Windows.Forms.Button();
-			this.protobufstate = new System.Windows.Forms.Label();
+			this.protobufLabel = new System.Windows.Forms.Label();
 			this.btn_Unzip = new System.Windows.Forms.Button();
 			this.btn_CompileProtoc = new System.Windows.Forms.Button();
 			this.btn_Installmodel = new System.Windows.Forms.Button();
@@ -53,17 +53,15 @@
 			this.btn_ExportGraph = new System.Windows.Forms.Button();
 			this.btn_Webcam = new System.Windows.Forms.Button();
 			this.btn_Tesnorboard = new System.Windows.Forms.Button();
-			this.NetSelector = new System.Windows.Forms.ComboBox();
 			this.button9 = new System.Windows.Forms.Button();
 			this.label9 = new System.Windows.Forms.Label();
 			this.STDOUT = new System.Windows.Forms.TextBox();
 			this.btn_Cancel = new System.Windows.Forms.Button();
 			this.btn_Clear = new System.Windows.Forms.Button();
-			this.btn_ExportLightGraph = new System.Windows.Forms.Button();
-			this.btn_ExportAll = new System.Windows.Forms.Button();
 			this.Dependencies = new System.Windows.Forms.GroupBox();
 			this.Prerequisites_Label = new System.Windows.Forms.Label();
 			this.boxDownloads = new System.Windows.Forms.GroupBox();
+			this.label4 = new System.Windows.Forms.Label();
 			this.label11 = new System.Windows.Forms.Label();
 			this.label1 = new System.Windows.Forms.Label();
 			this.groupBox1 = new System.Windows.Forms.GroupBox();
@@ -72,7 +70,7 @@
 			this.label2 = new System.Windows.Forms.Label();
 			this.groupBox4 = new System.Windows.Forms.GroupBox();
 			this.groupBox5 = new System.Windows.Forms.GroupBox();
-			this.label3 = new System.Windows.Forms.Label();
+			this.btn_ExportLiteGraph = new System.Windows.Forms.Button();
 			this.Dependencies.SuspendLayout();
 			this.boxDownloads.SuspendLayout();
 			this.groupBox1.SuspendLayout();
@@ -178,14 +176,14 @@
 			this.btn_protobuf.UseVisualStyleBackColor = true;
 			this.btn_protobuf.Click += new System.EventHandler(this.btn_DownloadProtobuf_Click);
 			// 
-			// protobufstate
+			// protobufLabel
 			// 
-			this.protobufstate.AutoSize = true;
-			this.protobufstate.Location = new System.Drawing.Point(441, 76);
-			this.protobufstate.Name = "protobufstate";
-			this.protobufstate.Size = new System.Drawing.Size(80, 15);
-			this.protobufstate.TabIndex = 13;
-			this.protobufstate.Text = "State: Missing";
+			this.protobufLabel.AutoSize = true;
+			this.protobufLabel.Location = new System.Drawing.Point(441, 76);
+			this.protobufLabel.Name = "protobufLabel";
+			this.protobufLabel.Size = new System.Drawing.Size(80, 15);
+			this.protobufLabel.TabIndex = 13;
+			this.protobufLabel.Text = "State: Missing";
 			// 
 			// btn_Unzip
 			// 
@@ -253,7 +251,6 @@
 			this.objectTextBox.Name = "objectTextBox";
 			this.objectTextBox.Size = new System.Drawing.Size(530, 23);
 			this.objectTextBox.TabIndex = 27;
-			this.objectTextBox.TextChanged += new System.EventHandler(this.objectTextBox_TextChanged);
 			// 
 			// label7
 			// 
@@ -300,15 +297,15 @@
 			this.btn_ExportGraph.Name = "btn_ExportGraph";
 			this.btn_ExportGraph.Size = new System.Drawing.Size(154, 23);
 			this.btn_ExportGraph.TabIndex = 32;
-			this.btn_ExportGraph.Text = "Export Frozen Graph";
+			this.btn_ExportGraph.Text = "Export Graph";
 			this.btn_ExportGraph.UseVisualStyleBackColor = true;
 			this.btn_ExportGraph.Click += new System.EventHandler(this.btn_ExportGraph_Click);
 			// 
 			// btn_Webcam
 			// 
-			this.btn_Webcam.Location = new System.Drawing.Point(172, 22);
+			this.btn_Webcam.Location = new System.Drawing.Point(12, 51);
 			this.btn_Webcam.Name = "btn_Webcam";
-			this.btn_Webcam.Size = new System.Drawing.Size(152, 23);
+			this.btn_Webcam.Size = new System.Drawing.Size(154, 23);
 			this.btn_Webcam.TabIndex = 34;
 			this.btn_Webcam.Text = "Test on Webcam";
 			this.btn_Webcam.UseVisualStyleBackColor = true;
@@ -323,14 +320,6 @@
 			this.btn_Tesnorboard.Text = "Open Tensorboard";
 			this.btn_Tesnorboard.UseVisualStyleBackColor = true;
 			this.btn_Tesnorboard.Click += new System.EventHandler(this.btn_Tesnorboard_Click);
-			// 
-			// NetSelector
-			// 
-			this.NetSelector.FormattingEnabled = true;
-			this.NetSelector.Location = new System.Drawing.Point(6, 45);
-			this.NetSelector.Name = "NetSelector";
-			this.NetSelector.Size = new System.Drawing.Size(281, 23);
-			this.NetSelector.TabIndex = 36;
 			// 
 			// button9
 			// 
@@ -381,26 +370,6 @@
 			this.btn_Clear.UseVisualStyleBackColor = true;
 			this.btn_Clear.Click += new System.EventHandler(this.btn_Clear_Click);
 			// 
-			// btn_ExportLightGraph
-			// 
-			this.btn_ExportLightGraph.Location = new System.Drawing.Point(377, 51);
-			this.btn_ExportLightGraph.Name = "btn_ExportLightGraph";
-			this.btn_ExportLightGraph.Size = new System.Drawing.Size(138, 23);
-			this.btn_ExportLightGraph.TabIndex = 45;
-			this.btn_ExportLightGraph.Text = "Export Light Graph";
-			this.btn_ExportLightGraph.UseVisualStyleBackColor = true;
-			this.btn_ExportLightGraph.Click += new System.EventHandler(this.btn_ExportLightGraph_Click);
-			// 
-			// btn_ExportAll
-			// 
-			this.btn_ExportAll.Location = new System.Drawing.Point(12, 51);
-			this.btn_ExportAll.Name = "btn_ExportAll";
-			this.btn_ExportAll.Size = new System.Drawing.Size(312, 27);
-			this.btn_ExportAll.TabIndex = 46;
-			this.btn_ExportAll.Text = "Export Finished Model";
-			this.btn_ExportAll.UseVisualStyleBackColor = true;
-			this.btn_ExportAll.Click += new System.EventHandler(this.btn_ExportAll_Click);
-			// 
 			// Dependencies
 			// 
 			this.Dependencies.Controls.Add(this.Prerequisites_Label);
@@ -427,7 +396,8 @@
 			// 
 			// boxDownloads
 			// 
-			this.boxDownloads.Controls.Add(this.protobufstate);
+			this.boxDownloads.Controls.Add(this.label4);
+			this.boxDownloads.Controls.Add(this.protobufLabel);
 			this.boxDownloads.Controls.Add(this.neuralNetLabel);
 			this.boxDownloads.Controls.Add(this.objectDetectionStateLabel);
 			this.boxDownloads.Controls.Add(this.button1);
@@ -435,7 +405,6 @@
 			this.boxDownloads.Controls.Add(this.btn_protobuf);
 			this.boxDownloads.Controls.Add(this.btn_DownloadOD);
 			this.boxDownloads.Controls.Add(this.btn_downloadspecififcmodel);
-			this.boxDownloads.Controls.Add(this.NetSelector);
 			this.boxDownloads.Controls.Add(this.label1);
 			this.boxDownloads.Location = new System.Drawing.Point(562, 75);
 			this.boxDownloads.Name = "boxDownloads";
@@ -443,6 +412,16 @@
 			this.boxDownloads.TabIndex = 49;
 			this.boxDownloads.TabStop = false;
 			this.boxDownloads.Text = "Downloads";
+			// 
+			// label4
+			// 
+			this.label4.AutoSize = true;
+			this.label4.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
+			this.label4.Location = new System.Drawing.Point(6, 45);
+			this.label4.Name = "label4";
+			this.label4.Size = new System.Drawing.Size(56, 19);
+			this.label4.TabIndex = 38;
+			this.label4.Text = "Model:";
 			// 
 			// label11
 			// 
@@ -527,27 +506,25 @@
 			// 
 			// groupBox5
 			// 
-			this.groupBox5.Controls.Add(this.btn_ExportAll);
+			this.groupBox5.Controls.Add(this.btn_ExportLiteGraph);
 			this.groupBox5.Controls.Add(this.btn_Webcam);
-			this.groupBox5.Controls.Add(this.btn_ExportLightGraph);
-			this.groupBox5.Controls.Add(this.label3);
 			this.groupBox5.Controls.Add(this.btn_ExportGraph);
 			this.groupBox5.Location = new System.Drawing.Point(562, 534);
 			this.groupBox5.Name = "groupBox5";
-			this.groupBox5.Size = new System.Drawing.Size(552, 100);
+			this.groupBox5.Size = new System.Drawing.Size(552, 88);
 			this.groupBox5.TabIndex = 53;
 			this.groupBox5.TabStop = false;
 			this.groupBox5.Text = "Export";
 			// 
-			// label3
+			// btn_ExportLiteGraph
 			// 
-			this.label3.AutoSize = true;
-			this.label3.Font = new System.Drawing.Font("Segoe UI", 10F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
-			this.label3.Location = new System.Drawing.Point(371, 24);
-			this.label3.Name = "label3";
-			this.label3.Size = new System.Drawing.Size(151, 19);
-			this.label3.TabIndex = 37;
-			this.label3.Text = "Experimental Feature";
+			this.btn_ExportLiteGraph.Location = new System.Drawing.Point(172, 22);
+			this.btn_ExportLiteGraph.Name = "btn_ExportLiteGraph";
+			this.btn_ExportLiteGraph.Size = new System.Drawing.Size(214, 23);
+			this.btn_ExportLiteGraph.TabIndex = 35;
+			this.btn_ExportLiteGraph.Text = "Export Lite Convertible Graph";
+			this.btn_ExportLiteGraph.UseVisualStyleBackColor = true;
+			this.btn_ExportLiteGraph.Click += new System.EventHandler(this.btn_ExportLiteGraph_Click);
 			// 
 			// MainForm
 			// 
@@ -579,7 +556,6 @@
 			this.groupBox3.PerformLayout();
 			this.groupBox4.ResumeLayout(false);
 			this.groupBox5.ResumeLayout(false);
-			this.groupBox5.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -598,7 +574,7 @@
 		private System.Windows.Forms.Button btn_downloadspecififcmodel;
 		private System.Windows.Forms.Label neuralNetLabel;
 		private System.Windows.Forms.Button btn_protobuf;
-		private System.Windows.Forms.Label protobufstate;
+		private System.Windows.Forms.Label protobufLabel;
 		private System.Windows.Forms.Button btn_Unzip;
 		private System.Windows.Forms.Button btn_CompileProtoc;
 		private System.Windows.Forms.Button btn_Installmodel;
@@ -613,14 +589,11 @@
 		private System.Windows.Forms.Button btn_ExportGraph;
 		private System.Windows.Forms.Button btn_Webcam;
 		private System.Windows.Forms.Button btn_Tesnorboard;
-		private System.Windows.Forms.ComboBox NetSelector;
 		private System.Windows.Forms.Button button9;
 		private System.Windows.Forms.Label label9;
 		private System.Windows.Forms.TextBox STDOUT;
 		private System.Windows.Forms.Button btn_Cancel;
 		private System.Windows.Forms.Button btn_Clear;
-		private System.Windows.Forms.Button btn_ExportLightGraph;
-		private System.Windows.Forms.Button btn_ExportAll;
 		private System.Windows.Forms.GroupBox Dependencies;
 		private System.Windows.Forms.GroupBox boxDownloads;
 		private System.Windows.Forms.Label label11;
@@ -631,8 +604,9 @@
 		private System.Windows.Forms.Label label2;
 		private System.Windows.Forms.GroupBox groupBox4;
 		private System.Windows.Forms.GroupBox groupBox5;
-		private System.Windows.Forms.Label label3;
 		private System.Windows.Forms.Label Prerequisites_Label;
+		private System.Windows.Forms.Label label4;
+		private System.Windows.Forms.Button btn_ExportLiteGraph;
 	}
 }
 

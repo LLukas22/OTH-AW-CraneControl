@@ -8,16 +8,16 @@ namespace TensorflowInstallationScript.DataHelpers
 {
 	public class DirectoryCreator
 	{
-		public DirectoryCreator(DirectoryPaths directoryPaths, string objectdetectionFile, string neuralNetFile,
+		public DirectoryCreator(Paths paths, string objectdetectionFile, string neuralNetFile,
 			string protbufFile)
 		{
-			DirectoryPaths = directoryPaths;
+			Paths = paths;
 			ObjectdetectionFile = objectdetectionFile;
 			NeuralNetFile = neuralNetFile;
 			ProtbufFile = protbufFile;
 		}
 
-		public DirectoryPaths DirectoryPaths { get; }
+		public Paths Paths { get; }
 		public string ObjectdetectionFile { get; }
 		public string NeuralNetFile { get; }
 		public string ProtbufFile { get; }
@@ -48,14 +48,14 @@ namespace TensorflowInstallationScript.DataHelpers
 					fs.Seek(0, SeekOrigin.Begin);
 					if (buffer[0] == 0x1F
 					    && buffer[1] == 0x8B)
-						Tar.ExtractTarGz(fs, DirectoryPaths.ObjectDetection);
+						Tar.ExtractTarGz(fs, Paths.ObjectDetection);
 					else
-						Tar.ExtractTar(fs, DirectoryPaths.ObjectDetection);
-					var dirinfo = new DirectoryInfo(DirectoryPaths.ObjectDetection);
+						Tar.ExtractTar(fs, Paths.ObjectDetection);
+					var dirinfo = new DirectoryInfo(Paths.ObjectDetection);
 					var filesInDir = dirinfo.GetDirectories("*" + "net" + "*.*");
 					if (filesInDir.Any())
 					{
-						Directory.Move(filesInDir[0].FullName, Path.Combine(DirectoryPaths.ObjectDetection, "net"));
+						Directory.Move(filesInDir[0].FullName, Path.Combine(Paths.ObjectDetection, "net"));
 					}
 					
 				}
@@ -66,12 +66,12 @@ namespace TensorflowInstallationScript.DataHelpers
 				ZipFile.ExtractToDirectory(ProtbufFile, @"Protobuf");
 
 
-				Directory.CreateDirectory(DirectoryPaths.Images);
-				Directory.CreateDirectory(Path.Combine(DirectoryPaths.Images, @"test"));
-				Directory.CreateDirectory(Path.Combine(DirectoryPaths.Images, @"train"));
-				Directory.CreateDirectory(Path.Combine(DirectoryPaths.Images, @"input"));
-				Directory.CreateDirectory(DirectoryPaths.Training);
-				Directory.CreateDirectory(Path.Combine(DirectoryPaths.ObjectDetection, @"light_graph"));
+				Directory.CreateDirectory(Paths.Images);
+				Directory.CreateDirectory(Path.Combine(Paths.Images, @"test"));
+				Directory.CreateDirectory(Path.Combine(Paths.Images, @"train"));
+				Directory.CreateDirectory(Path.Combine(Paths.Images, @"input"));
+				Directory.CreateDirectory(Paths.Training);
+				Directory.CreateDirectory(Path.Combine(Paths.ObjectDetection, @"light_graph"));
 			}
 			catch (Exception ex)
 			{

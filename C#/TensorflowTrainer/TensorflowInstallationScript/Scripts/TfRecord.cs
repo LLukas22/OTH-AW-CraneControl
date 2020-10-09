@@ -7,7 +7,7 @@ namespace TensorflowInstallationScript.Scripts
 	{
 		public GenerateTfRecord(List<string> objects)
 		{
-			ScriptName = "generate_tfrecord.py";
+			ScriptName = "generate_tf_record.py";
 
 			Script = @"
 from __future__ import division
