@@ -30,4 +30,6 @@ _ReSharper*/
 *.out
 *.toc
 *.blg
+*.bbl
+.vscode
 ResNet 50
