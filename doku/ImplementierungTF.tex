@@ -1,0 +1,55 @@
+\section{Tensorflow - Python}
+\subsection{Konzept}
+Es wird ein Object-Detection-Model verwendet um über eine Webcam eine von sechs Gesten zu erkennen.
+Die erkannte Geste wird in einem Buffer zwischengespeichert, und wenn mehrere Durchläufe das gleiche Ergebniss liefern wird ein Befehl an den Kran gesendet.
+
+\begin{figure}[H]
+    \centering
+    \subfigure[Power]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Power.PNG}}
+    \subfigure[Up]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Up.PNG}}
+    \subfigure[Down]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Down.PNG}}
+    \subfigure[Left]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Left.PNG}}
+    \subfigure[Right]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Right.PNG}}
+    \subfigure[Toggle]{\includegraphics[width=0.3\textwidth]{TensorFlow/Gestures/Toggle.PNG}}
+    \caption[Tensorflow Gesten]{Tensorflow Gesten. Bildquelle: eigene Bilder}
+    \label{fig:Tensorflow Gesten}
+\end{figure}
+\newpage
+\subsection{Tensorflow Trainer}
+Um das tränieren der Modele zu erleichtern wurde eine C\# Application geschrieben, die diesen Vorgang weitgehend automatisiert.
+
+\begin{figure}[H]
+    \centering
+    \subfigure{\includegraphics[width=0.9\textwidth]{TensorFlow/TensorflowTrainer.PNG}}
+    \caption[Tensorflow Trainer]{Tensorflow Trainer}
+    \label{fig:Tensorflow Trainer}
+\end{figure}
+
+\subsection{Tränieren eines eigene Models}
+
+\subsubsection{Voraussetzungen:}
+
+% \begin{tensorflowTrainerPrerequisites}[H]
+%     \item Git (\url{https://git-scm.com/downloads})
+%     \item C++ Build Tools (\url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16})
+%     \item Python 3.7.X or newer (\url{https://www.python.org/downloads/})
+%     \item LabelImg (\url{https://github.com/tzutalin/labelImg})
+%     \item Nvidia Gpu (optional but highly recommended)
+%     \item Download Matching CUDA Version (\url{https://www.tensorflow.org/install/gpu})
+%     \item Matching cuDNN Version (\url{https://developer.nvidia.com/cudnn})
+% \end{tensorflowTrainerPrerequisites}
+
+
+
+
+\textbf{TensorflowTrainer:} \\
+Git: \url{https://git-scm.com/downloads}\\
+Suppoerted Models: \url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}\\
+Microsoft C++ Build Tools: \url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16}\\
+Für GPU-Support: \url{https://www.tensorflow.org/install/gpu}\\
+
+
+\textbf{Für PI:} \\
+TFLight : \url{https://www.tensorflow.org/lite/guide/python}\\
+Apt.Get : sudo apt-get install python3-pil python3-pil.imagetk libatlas-base-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test\\
+Pip3: pip3 install Pillow,opencv-python\\

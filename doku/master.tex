@@ -101,60 +101,61 @@
 
 
 \begin{document}
-  \pagenumbering{roman}
+\pagenumbering{roman}
 
-  \thispagestyle{empty}			
-  \begin{center}
-    \begin{figure}[H]
-      \centering
-      \includegraphics[width=0.7\linewidth]{OTH-Logo.jpg}
-      \label{fig:OTH-Logo}
-    \end{figure}[1cm]
-    \Large
-    Ostbayerische Technische Hochschule Amberg-Weiden\\
-    Fakultät Elektrotechnik, Medien und Informatik\\[1cm]
-    Studiengang \IhrStudiengang\\[1cm]
-    \textbf{\IhreArbeit}\\[1cm]
-    von\\[1cm]
-    \textbf{\ErsterName\ , \ZweiterName}\\[1cm]
-    \textbf{\IhrTitelDE}\\[1cm]
-  \end{center}
-  \vspace*{3cm}
+\thispagestyle{empty}
+\begin{center}
+  \begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\linewidth]{OTH-Logo.jpg}
+    \label{fig:OTH-Logo}
+  \end{figure}[1cm]
+  \Large
+  Ostbayerische Technische Hochschule Amberg-Weiden\\
+  Fakultät Elektrotechnik, Medien und Informatik\\[1cm]
+  Studiengang \IhrStudiengang\\[1cm]
+  \textbf{\IhreArbeit}\\[1cm]
+  von\\[1cm]
+  \textbf{\ErsterName\ , \ZweiterName}\\[1cm]
+  \textbf{\IhrTitelDE}\\[1cm]
+\end{center}
+\vspace*{3cm}
 
-  \vspace*{1cm}
-  \underbar{Professor:}\qquad\Professor
-  \clearpage
-  \tableofcontents
-  \newpage
-  
-  
-  \pagenumbering{arabic}
-  \include{Einleitung}
-  \include{Herangehensweise}
-  \include{Uebertragung}
-  \include{Implemetierung}
-  \include{Vergleich}
-  \include{Zusammenfassung}
+\vspace*{1cm}
+\underbar{Professor:}\qquad\Professor
+\clearpage
+\tableofcontents
+\newpage
 
-   % Literaturverzeichnis
-   \phantomsection
-   \addcontentsline{toc}{chapter}{Literaturverzeichnis}
-   \bibliographystyle{natdin}
-   \bibliography{literatur}
-   \newpage
-    
-  % Abbildungsverzeichnis
-  \phantomsection
-  \addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
-  \listoffigures
-  \newpage
 
-  %Tabellenverzeichnis
-  \phantomsection
-  \addcontentsline{toc}{chapter}{Tabellenverzeichnis}
-  \listoftables
-  \newpage
+\pagenumbering{arabic}
+\include{Einleitung}
+\include{Herangehensweise}
+\include{Uebertragung}
+\include{ImplementierungKinect}
+\include{ImplementierungTF}
+\include{Vergleich}
+\include{Zusammenfassung}
 
-  % Anhang
-  %\include{anhang}
-\end{document}    
+% Literaturverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{Literaturverzeichnis}
+\bibliographystyle{natdin}
+\bibliography{literatur}
+\newpage
+
+% Abbildungsverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{Abbildungsverzeichnis}
+\listoffigures
+\newpage
+
+%Tabellenverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{Tabellenverzeichnis}
+\listoftables
+\newpage
+
+% Anhang
+%\include{anhang}
+\end{document}

@@ -1,10 +1,10 @@
 \chapter{Herangehensweise}
-Aufteilen :	Lukas Tensorflow
-		Andreas Kinect
-			Projekt aus Internet zur Handerkennung
-				Einenzeichen der Hand in Vorschaubild \cite{KinectFingerTracking}
-			Kinect hat eingebaute Gestenerkennung
-			Richtungserkennung über Skelett
-				Finger Tip – Hand Middle
+Durch die Anforderung von 2 Möglichkeiten wurden diese Aufgeteilt und jeder hat sich mit einer Variante beschäftigt.
+
 \section{Kinect}
+Zuerst wurde das Kinect 2.0 SDK heruntergeladen und installiert. Danach wurde ein Beispielproject gesucht \cite{KinectFingerTracking}, welches sich
+auch zum Teil im Fertigen Project wiederfindet. Es dient der Veranschaulichung, welche Hände momentan erkannt werden,
+und zeichnet um diese einen Rahmen herum. Danach wurde auf Basis der Vordefinierten Gesten der Kinect Gesten für die Krahnbewegungen festgelegt und
+die Geste für Bewgung mit einer Richtungsangabe über das Skelett versehen. Diese wurden dann an den Server gegebn, das dieser diese dem Krahn auf
+Anfrage mitteilen kann.
 \section{Tensorflow}
