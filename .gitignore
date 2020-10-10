@@ -30,6 +30,4 @@ _ReSharper*/
 *.out
 *.toc
 *.blg
-*.bbl
-doku/master.pdf
 ResNet 50
