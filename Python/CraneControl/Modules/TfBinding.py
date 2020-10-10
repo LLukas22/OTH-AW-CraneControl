@@ -48,6 +48,7 @@ class TFInception(object):
         if gpus:
             for gpu in gpus:
                 tf.config.experimental.set_memory_growth(gpu, True)
+                
         if(self.model.tfVersion is TfVersion.Tf1):
             self.LoadTf1()
             self.thread = Thread(target=self.DetectTf1, args=(), daemon=True)

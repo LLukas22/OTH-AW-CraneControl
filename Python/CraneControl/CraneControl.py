@@ -21,8 +21,8 @@ import Modules.TfBinding as TF
 # Program
 #####################
 
-tfVersion = TfVersion.Tf1
-min_conf_threshold = 0.4
+tfVersion = TfVersion.Tf2
+min_conf_threshold = 0.5
 buffer_Lenght = 60
 evaluation_Slice_Size = 5
 min_Positive_Occurrances = 4
@@ -31,9 +31,11 @@ framerate = 30
 port = 54000
 acceleration = 2
 videoDevice = 0
-litemodel = 'TFModels/detectV2.tflite'
-heavymodel = 'TFModels/frozen_inference_graph.pb'
+litemodel = 'TFModels/mobilnet_300x300v2.tflite'
+heavymodel = 'TFModels/mobilnet_300x300.pb'
 tfVersion = TF.Initialize(tfVersion)
+if tfVersion is TfVersion.Tf2:
+    heavymodel = 'TFModels/ResNet 50'
 labels = TF.returnLabels(os.path.join(os.getcwd(), 'TFModels/labelmap.txt'),tfVersion)
 
 view = tk.Tk()
