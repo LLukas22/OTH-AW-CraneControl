@@ -29,25 +29,73 @@ Um das tränieren der Modele zu erleichtern wurde eine C\# Application geschrieb
 
 \subsubsection{Voraussetzungen:}
 
-% \begin{tensorflowTrainerPrerequisites}[H]
-%     \item Git (\url{https://git-scm.com/downloads})
-%     \item C++ Build Tools (\url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16})
-%     \item Python 3.7.X or newer (\url{https://www.python.org/downloads/})
-%     \item LabelImg (\url{https://github.com/tzutalin/labelImg})
-%     \item Nvidia Gpu (optional but highly recommended)
-%     \item Download Matching CUDA Version (\url{https://www.tensorflow.org/install/gpu})
-%     \item Matching cuDNN Version (\url{https://developer.nvidia.com/cudnn})
-% \end{tensorflowTrainerPrerequisites}
+\begin{itemize}
+    \item Git (\url{https://git-scm.com/downloads})
+    \item C++ Build Tools (\url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16})
+    \item Python 3.7.X or newer (\url{https://www.python.org/downloads/})
+    \item LabelImg (\url{https://github.com/tzutalin/labelImg})
+    \item Nvidia Gpu (optional but highly recommended)
+    \begin{itemize}
+    \item Download Matching CUDA Version (\url{https://www.tensorflow.org/install/gpu})
+    \item Matching cuDNN Version (\url{https://developer.nvidia.com/cudnn})
+    \end{itemize}
+\end{itemize}
+
+\subsubsection{Erstellen eines Datensatzes}
+Um eine Datensatz zu erzeugen müssen zunächst mit LabelImg Boxen (XML PASCAL VOC Format) um die zu Erkennenden Objekte gezogn werden.
+Hierbei sind 150-250 Bilder pro Objekt ein guter Richtwert.
+
+\subsubsection{Python Packete}
+Die benötigten Pip-Packete werden durch Klicken des "Install"-Buttons im TensorflowTrainer installiert. Soll die GPU-Version von Tensorflow installiert werden muss die CheckBox "GPU Acceleration" abgehackt werden.
+Der "Uninstall"-Button entfernt alle installierten Packete.
+
+\subsubsection{Settings.json}
+Nach erstem öffnen und schließen des TensorflowTrainer wird eine Settings.json erzeugt.
+\begin{figure}[H]
+    \centering
+    \subfigure{\includegraphics[width=0.9\textwidth]{TensorFlow/Settings.PNG}}
+    \caption[Settings]{Settings.json}
+    \label{fig:Settings.json}
+\end{figure}
+Hier können Einstellungen angepasst werden, wobei das Feld "ModelUrl" das wichtigste ist, da hier das zu verwendende Model des TF-Model-Zoo (\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}) angegeben werden kann.
+
+\subsubsection{Downloads und Setup}
+Um die Restlichen Daten herunterzuladen, müssen die drei Download-Buttons betätigt werden. Um die Downloads zu löschen kann der Clear Cache - Button verwendet werden.
+Nun muss in Environment ein Ordner augewähl werden, in dem das Träning statfinden soll. Danach muss der "Build" - Button betätigt werden. Der "Open" - Button öffnet den ObjectDetection-Ordner.
+Um die Installation abzuschließen muss zuerst der "Compile *.protoc Files" und danach der "Execute setup.py" - Button betätigt werden. Nun werden alle ObjectDetection Module installiert und die Tensorflow Tests ausgeführt.
+Wenn das Testergebnis "OK" ist war die Installation erfolgreich.
+
+\subsubsection{TF Records}
+Als Nächstes müssen alle Bilder mit *.Xml Dateien nach ObjectDetection/images/input kopiert werden und die in LabelImg verwendeten Label in richtiger Reihenfolgen in die Textbox eingegeben werden.
+Danach die 4 Buttons von links nach Rechts betätigen. Dies erzeugt test- und train.record im ObjectDetection-Ordner und autogeneriert die Labelmap und customPipeline in ObjectDetection/training.
+
+\subsubsection{Pipeline Config}
+In der customPipeline.config können nach bedarf DataAugemntation-Optionen hinzugefügt oder entfernt werden (\url{https://stackoverflow.com/questions/44906317/what-are-possible-values-for-data-augmentation-options-in-the-tensorflow-object}).
+\begin{figure}[H]
+    \centering
+    \subfigure{\includegraphics[width=0.9\textwidth]{TensorFlow/pipeline.PNG}}
+    \caption[customPipeline.config]{customPipeline.config}
+    \label{fig:customPipeline.config}
+\end{figure}
+
+Die wichtigsten anpassbaren Werten sind:
+
+\begin{itemize}
+    \item Batch\_Size was die auf einmal zu verarbeitenden Bilder sind. Falls nicht genug RAM im System verfügbar ist muss die Batch\_Size gesenk werden.
+    \item learning\_rate\_base Geht der Loss nach einigen schritten gegen Unendlich ist die LearningRate zu hoch.
+    \item warmup\_learning\_rate ähnlich wie learning\_rate\_base gilt aber nur für ersten warmup\_steps.
+\end{itemize}
 
 
+\subsubsection{Träning}
+Das Träning wird durch eine Click auf "Start Training!" gestartet. Als andere Option kann man auch im ObjectDetection Ordner "python model\_main\_tf2.py\" ausführen. Tenorboard kann über einen Click \"Open Tensorboard\" geöffnet werden.
+Fällt der Loss sich nach einiger Zeit nicht mehr ändert kann das Träning abgebrochen werden und das Fertige Model über einen Klick auf \"Export Graph\" nach ObjectDetection/export/normal exportiert werden und über \"Test on Webcam\" getestet werden.
 
 
-\textbf{TensorflowTrainer:} \\
-Git: \url{https://git-scm.com/downloads}\\
-Suppoerted Models: \url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}\\
-Microsoft C++ Build Tools: \url{https://visualstudio.microsoft.com/thank-you-downloading-visual-studio/?sku=BuildTools&rel=16}\\
-Für GPU-Support: \url{https://www.tensorflow.org/install/gpu}\\
+\subsubsection{Lite Graph}
+Mit einem Klick auf \" Export Lite Convertible Graph\" wird ein Saved Model nach ObjectDetection/export/LiteConvertibleGraph exportiert, das mit dem TFLite-Converter (\url{https://www.tensorflow.org/lite/convert}) zu einem TFLite Model convertiert werden kann.
 
+\subsection{Python Anwendung}
 
 \textbf{Für PI:} \\
 TFLight : \url{https://www.tensorflow.org/lite/guide/python}\\
