@@ -1,8 +1,8 @@
 \chapter{Implementierung}
 \section{Kinect - C\#}
 \subsection{Konzept}
-Kinect erkennt 3 Gesten + NotTracked + Unknown
-
+Auf der Basis der erkannten Gesten der Kinect und der Richtung der Lasso Geste soll eine Bewegungsanweisung an den Krahn gesendet werden.\\
+Die Gesten sind wie folgt:
 \begin{figure}[H]
     \centering
     \subfigure[Offen]{\includegraphics[width=0.32\textwidth]{Geste_offen.jpg}}
@@ -12,9 +12,35 @@ Kinect erkennt 3 Gesten + NotTracked + Unknown
     \label{fig:Kinect Gesten}
 \end{figure}
 
+Die offene Hand wird nicht als Geste verwendet, da auch eine Möglichkeit bestehen muss kein Befehl zu senden. Mit dem schließen der linken oder rechten
+Hand kann der Regler des Krahns oder die Betriebsmodi des Krahs umgeschalten werden. Über die Lasso Geste soll die Bewegung gesteuert werden, dazu
+werden über das Skelett des zugehörigen Körpers die Koordinaten von Handmittelpunkt und Fingerspitze verglichen.
 
 \subsection{Code}
-\subsubsection{Gestenerkennung}
+
+\subsubsection{Krahnsteuerung}
+Im Hauptprogramm wird das Winform Fenster erzeugt und auch der Server verwaltet. Der Server läuft in einem eingenen Task und ist somit weitestgehend
+unabhängig vom rest des Programms und antwortet dem Krahn auf anfrage mit den Bewegungsdaten.
+
+\subsubsection{Kinect}
+Hier wird die Kinect initialisiert und verwaltet. Ausgegeben werden die Bilder für die anzeige in der Windowsoberfläche und ein Array mit den erkannten
+Befehlen. Damit wird der Speicher im Server aktualisiert, vom der der Server ließt um dem Krahn daten zu senden.\\
+Die erkennung der Gesten für den Regler und die Betriebsmodi ist durch die Kinect bereits zu einem grißem Teil implementiert. Man muss sich nur
+die aktullen Gesten mit der zugehörigen Hand ausgeben und bei der Kombination Rechte Hand ist geschlossen wird der Regler umgeschalten bzw. Linke Hand
+ist geschlossen dann wird der Betriebsmodus umgeschalten.\\
+Die Richtungsgesten gestalten sich etwach komplizeriter, da zur Geste "Lasso" auch noch eine Richtung benötigt wird. Dazu kann das Skelett, welches die
+Kinect für jeden Körper im Bild erstellt, verwendet werden. Mann sieht sich die Punkte für Handmittelpunkt und Fingerspitze der Hand an, bei der
+das "Lasso" erkannt wurde an und vergleicht den Unterschied der x und y Koordinaten.
+\\\
+\lstinputlisting[label={lst:Bewegungsanweisung},
+    numbers={none},
+    caption={Berechnung der Bewegungsrichtung}]
+{CodeSamples/HandGestureDirections.cs}
+
+\newpage
+Bildlich dargestellt ist der Handmittelpunkt bei (0,0). Abhängig davon wo die Fingerspitzen in Realtion dazu sind werden die roten Bereiche
+herrausgefiltert und ansonsten die jeweilige Richtung zurück gegeben.
+
 \begin{figure}[H]
     \centering
     \begin{tikzpicture}
@@ -35,17 +61,23 @@ Kinect erkennt 3 Gesten + NotTracked + Unknown
     \caption{Filter der Richtungsgesten.}
     \label{fig:Richtungsfilter}
 \end{figure}
-\subsubsection{Kinect}
-Übernimmt die Initialiserung und Verabeitung der Kinect. Ausgegeben werden eine Bitmap des Bildes und in einem Array die Richtungsanweisungen.
-Im Bild werden die erkannten Hände umrandet.
 
-\subsubsection{Krahnsteuerung}
-Ist das Hauptprogramm in dem das Winform und der Server gehandhabt werden.
+\subsubsection{PubSubEvent}
+Modul, das die Datenweitergabe an das Hauptprogramm bzw. den Server Regelt und dafür eine einheitliche Schnitstelle definiert. Dadurch können
+theoretisch sehr einfach weiter Module hinzugefügt werden.
+\\\
+\lstinputlisting[label={lst:Bewegungsanweisung},
+    numbers={none},
+    caption={Übertragung der Erkannten Daten}]
+{CodeSamples/Instructions.cs}
 
-\subsubsection{SharedRessources}
-Klasse, in der die Übergabe an das Hauptprogramm geregelt wird, so dass dieses um andere Eingabemöglichkeiten erweitert werden könnte.
-
-\subsection{UI}
+\newpage
+\subsection{User Interface}
+Das UI ist simple gehalten, um eine einfache Anwendung zu ermöglichen. Unten links wird der erkannte Befehl angezeigt. Rechts kann über das
+Zahnradsymbol ein Optionspannel ausgeklappt werden. Dort kann der Port, auf dem sich der Krahn verbinnden soll angegeben werden(Standard ist 54000),
+darunter ist zu erkennen, ob ein Client verbunden ist. Weiterhin kann eingestellt werden, ob das Farb-, Infrarot- oder Tiefenbild angezeigt werden soll.
+Außerdem kann die Beschläunigung des Krahns verändert werden. Über Knöpfe kann der Server pausiert werden, so das keine Pakete mehr gesendet werden,
+oder auch komplett ausgeschalten werden zum Neustarten.
 \begin{figure}[H]
     \centering
     \includegraphics[width=0.7\linewidth]{Kinect UI.png}

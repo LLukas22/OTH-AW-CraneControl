@@ -8,8 +8,8 @@
 \usepackage[a4paper,			% Papierformat A4
 	    left=2.5cm,				% linker Rand
 	    right=2.5cm,			% rechter Rand
-	    top=1.5cm,				% oberer Rand
-	    bottom=1.5cm,			% unter Rand
+	    top=1cm,				% oberer Rand
+	    bottom=1cm,			% unter Rand
 	    marginparsep=5mm,		% Abstand der Randnotizen
 	    marginparwidth=10mm, 	% Breite der Randnotizen
 	    headheight=7mm,			% Hoehe der Kopfzeile
@@ -64,7 +64,33 @@
         % Weitere Pakete
         %
         \usepackage{listings}			% Darstellung von Quellcode
-        \lstset{language=Python, basicstyle=\ttfamily, numbers=none}
+        \usepackage{xcolor}
+        %Own Code Style
+        \definecolor{codegreen}{rgb}{0,0.6,0}
+        \definecolor{codegray}{rgb}{0.5,0.5,0.5}
+        \definecolor{codepurple}{rgb}{0.58,0,0.82}
+        \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+        \lstdefinestyle{mystyle}{
+            backgroundcolor=\color{backcolour},   
+            commentstyle=\color{codegreen},
+            keywordstyle=\color{magenta},
+            numberstyle=\tiny\color{codegray},
+            stringstyle=\color{codepurple},
+            basicstyle=\ttfamily\footnotesize,
+            breakatwhitespace=false,         
+            breaklines=true,                 
+            captionpos=b,                    
+            keepspaces=true,                 
+            numbers=left,                    
+            numbersep=5pt,                  
+            showspaces=false,                
+            showstringspaces=false,
+            showtabs=false,                  
+            tabsize=2
+        }
+
+        \lstset{language=C++, basicstyle=\ttfamily, numbers=left,style=mystyle}
         %
         \usepackage[square,numbers,sort]{natbib} % Referenzen
         %
@@ -154,6 +180,12 @@
 \phantomsection
 \addcontentsline{toc}{chapter}{Tabellenverzeichnis}
 \listoftables
+\newpage
+
+%Listingsverzeichnis
+\phantomsection
+\addcontentsline{toc}{chapter}{Listingsverzeichnis}
+\lstlistoflistings
 \newpage
 
 % Anhang
