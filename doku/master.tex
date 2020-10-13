@@ -3,6 +3,9 @@
 \usepackage[utf8x]{inputenc}
 \usepackage[ngerman]{babel}
 
+\catcode`\_=12 % change catcode of "_" to "other" (no. 12)
+\catcode`\"=12 % change catcode of """ to "other" (no. 12)
+
 \usepackage{parskip}			% Einstellungen fuer Absaetze: Abstand statt Einrueckung
 
 \usepackage[a4paper,			% Papierformat A4
@@ -65,11 +68,18 @@
         %
         \usepackage{listings}			% Darstellung von Quellcode
         \usepackage{xcolor}
-        %Own Code Style
+        \usepackage{bera}
+
+        %Default Code Style
         \definecolor{codegreen}{rgb}{0,0.6,0}
         \definecolor{codegray}{rgb}{0.5,0.5,0.5}
         \definecolor{codepurple}{rgb}{0.58,0,0.82}
         \definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+        \colorlet{punct}{red!60!black}
+        \definecolor{background}{HTML}{EEEEEE}
+        \definecolor{delim}{RGB}{20,105,176}
+        \colorlet{numb}{magenta!60!black}
 
         \lstdefinestyle{mystyle}{
             backgroundcolor=\color{backcolour},   
@@ -90,7 +100,26 @@
             tabsize=2
         }
 
-        \lstset{language=C++, basicstyle=\ttfamily, numbers=left,style=mystyle}
+        \lstdefinelanguage{json}{
+        basicstyle=\normalfont\ttfamily,
+        numbers=left,
+        numberstyle=\scriptsize,
+        stepnumber=1,
+        numbersep=8pt,
+        showstringspaces=false,
+        breaklines=true,
+        frame=lines,
+        backgroundcolor=\color{background},
+        literate=
+        *{:}{{{\color{punct}{:}}}}{1}
+        {,}{{{\color{punct}{,}}}}{1}
+        {\{}{{{\color{delim}{\{}}}}{1}
+        {\}}{{{\color{delim}{\}}}}}{1}
+        {[}{{{\color{delim}{[}}}}{1}
+        {]}{{{\color{delim}{]}}}}{1},
+}
+
+        \lstset{language=Python, basicstyle=\ttfamily, numbers=left,style=mystyle}
         %
         \usepackage[square,numbers,sort]{natbib} % Referenzen
         %

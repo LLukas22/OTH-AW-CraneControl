@@ -1,0 +1,8 @@
+{
+  "MainDirectory": "F:\\TFModel",
+  "ObjectsToDetect": "Power;Down;Right;Up;Left;Toggle",
+  "TrainToEvaluateRatio": 0.2,
+  "ModelUrl": "http://download.tensorflow.org/models/object_detection/tf2/20200711/ssd_mobilenet_v2_320x320_coco17_tpu-8.tar.gz",
+  "ApiUrl": "https://github.com/tensorflow/models/archive/master.zip",
+  "ProtbufUrl": "https://github.com/protocolbuffers/protobuf/releases/download/v3.11.2/protoc-3.11.2-win64.zip"
+}
