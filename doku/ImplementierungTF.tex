@@ -98,7 +98,7 @@ Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als a
     firstline=30,
     lastline=36]
 {CodeSamples/Tensorflow/model_main_tf2.py}
-    \item[2.] Falls der Tränings Prozess einen Evaluations Durchgang ausführt und der TensorflowTrainer versucht den Prozess zu schließen läuft der Pyton Prozess weiter im Hintergrund -> Schließen über TaskManager.
+    \item[2.] Falls der Trainings Prozess einen Evaluations Durchgang ausführt und der TensorflowTrainer versucht den Prozess zu schließen läuft der Pyton Prozess weiter im Hintergrund -> Schließen über TaskManager.
 
 \end{itemize}
 
@@ -106,6 +106,39 @@ Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als a
 Mit einem Klick auf \textit{Export Lite Convertible Graph} wird ein Saved Model nach ObjectDetection/export/LiteConvertibleGraph exportiert, das mit dem TFLite-Converter (\url{https://www.tensorflow.org/lite/convert}) zu einem TFLite Model convertiert werden kann.
 
 \subsection{Python Anwendung}
+Um die trainierten Modelle verwenden zu können wurde eine Python Anwendung geschrieben, die TF 1, TF 2 und TF Lite Modelle unterstützt.
+\begin{figure}[H]
+    \centering
+    \subfigure{\includegraphics[width=0.9\textwidth]{TensorFlow/ApplicationArchitecture.png}}
+    \caption[Architektur]{Architektur}
+    \label{fig:Tensorflow Architektur}
+\end{figure}
+Die Anwendung wurde für den Raspberry Pi 4 optimiert und verwendet alle 4 Prozessor Kerne gleichzeitg, dennoch sollte beachtet werden, dass die Rechenleistung des PI sehr beschränkt ist und nur TF Lite Modelle verwendet werden sollten.  
+
+\subsubsection{GUI}
+Die GUI wurde sehr simpel gehalten um möglichst wenig CPU-Time zu brauchen.
+\begin{figure}[H]
+    \centering
+    \subfigure{\includegraphics[width=1\textwidth]{TensorFlow/GUI.PNG}}
+    \caption[Pyton Gui]{Pyton Gui}
+    \label{fig:Tensorflow GUI}
+\end{figure}
+Mit den \textit{Stop} und  \textit{Restart} Buttons können die einzelnen Threads des Programms angehalten oder neu gestartet werden. In der Linken oberen Ecke sieht man die derzeitige CPU Auslastung und die letzte Tensorflow-Detection Zeit. Wenn man den Tensorflow Thread angehalten hat ist es Möglich den Kran direkt über die Richtungs Buttons zu steuern. 
+
+\subsubsection{Einstellungen}
+Die Einstellungen können über Variablen in \textit{CraneControl.py} angepasst werden. 
+
+\lstinputlisting[language=python,label={lst:CraneControl Settings},
+numbers={none},
+caption={CraneControl Settings},
+firstline=24,
+lastline=41]
+{CodeSamples/Tensorflow/CraneControl.py}
+
+
+\subsubsection{Setup und Ausführung}
+Die Anwendung wird über aufrufen von \textit{CraneControl.py} mit Python gestartet. 
+
 
 \textbf{Für PI:} \\
 TFLight : \url{https://www.tensorflow.org/lite/guide/python}\\

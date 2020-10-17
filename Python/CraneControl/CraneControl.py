@@ -21,6 +21,11 @@ import Modules.TfBinding as TF
 # Program
 #####################
 
+
+
+
+# Settings
+#####################
 tfVersion = TfVersion.Tf2
 min_conf_threshold = 0.5
 buffer_Lenght = 60
@@ -37,6 +42,7 @@ tfVersion = TF.Initialize(tfVersion)
 if tfVersion is TfVersion.Tf2:
     heavymodel = 'TFModels/ResNet 50'
 labels = TF.returnLabels(os.path.join(os.getcwd(), 'TFModels/labelmap.txt'),tfVersion)
+#####################
 
 view = tk.Tk()
 view.bind('<Escape>', lambda e: view.quit())
