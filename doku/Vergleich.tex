@@ -3,17 +3,23 @@
 \textbf{Kinect}
 \begin{itemize}
     \item Einfache Implementierung, da ein Großteil der Datenverarbeitung direkt in der Kinect stattfindet
+    \item leicht erweiterbar ohne neue Datensätze zu trainieren
+    \item unabhängig von der PC-Leistung
+    \item Theoretisch kann man ich Nachhinein noch über TF die Bilder weiter auswerten
 \end{itemize}
 \textbf{Tensorflow}
 \begin{itemize}
     \item Keine spezielle Kamera notwendig.
     \item Theoretisch höhere Genauigkeit.
-    \item Kontrolle über den gesamten Prozess. (Kamera bis Model Output) 
+    \item Kontrolle über den gesamten Prozess. (Kamera bis Model Output)
 \end{itemize}
+\newpage
 \section{Nachteile}
 \textbf{Kinect}
 \begin{itemize}
-    \item Es ist immer eine Kinect notwendig
+    \item Es ist immer eine Kinect als Kamera notwendig
+    \item Kinect Library nicht für jede Programmiersprache verfügbar
+    \item Kinect ist am Aussterben
 \end{itemize}
 \textbf{Tensorflow}
 \begin{itemize}
@@ -22,3 +28,4 @@
     \item Für Echtzeit-Erkennung wird eine GPU oder TPU benötigt.
 \end{itemize}
 \section{Fazit}
+Beide Methoden haben einige Vor- \& Nachteile.

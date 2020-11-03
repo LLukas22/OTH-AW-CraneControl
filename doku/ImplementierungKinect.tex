@@ -16,6 +16,25 @@ Die offene Hand wird nicht als Geste verwendet, da auch eine Möglichkeit besteh
 Hand kann der Regler des Krahns oder die Betriebsmodi des Krahs umgeschalten werden. Über die Lasso Geste soll die Bewegung gesteuert werden, dazu
 werden über das Skelett des zugehörigen Körpers die Koordinaten von Handmittelpunkt und Fingerspitze verglichen.
 
+\subsection{Die Kinect}
+Die Kinect ist ein vielseitiges Stück Hardware, das eigentlich für die xBox 360 als gegenstück zu Wii dienen sollte. Jedoch hat sie nie großen Erfolg gehabt.\\
+Heutzutage wird sie va. nur noch für Kamervision-Projekte verwendet. Für diese bietet die Kinect viele Tools, um eine einfache Implementierung und auswertung
+zu ermöglichen.
+\subsubsection{Kameras}
+IR\\
+depth\\
+-> hintergrundentfernung\\
+color
+\subsubsection{Facedetection}
+Gesichtserkennung mit Gesichtsausdruck
+\subsubsection{3D-Bild}
+photography
+\subsubsection{Skelett}
+Skelet mit xxx Punkten
+\subsubsection{Gesten}
+Gestenbuilder
+\subsubsection{Mikrofon}
+Richtungsmikrofon
 \subsection{Code}
 
 \subsubsection{Krahnsteuerung}
@@ -66,7 +85,7 @@ herrausgefiltert und ansonsten die jeweilige Richtung zurück gegeben.
 Modul, das die Datenweitergabe an das Hauptprogramm bzw. den Server Regelt und dafür eine einheitliche Schnitstelle definiert. Dadurch können
 theoretisch sehr einfach weiter Module hinzugefügt werden.
 \\\
-\lstinputlisting[label={lst:Bewegungsanweisung},
+\lstinputlisting[label={lst:Bewegungsanweisungsliste},
     numbers={none},
     caption={Übertragung der Erkannten Daten}]
 {CodeSamples/Instructions.cs}
