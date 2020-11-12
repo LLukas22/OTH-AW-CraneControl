@@ -1,6 +1,58 @@
 \chapter{Implementierung}
 \section{Kinect - C\#}
+\subsection{Die Kinect}
+Die Kinect ist ein vielseitiges Stück Hardware, das eigentlich für die xBox 360 als gegenstück zu Wii dienen sollte. Jedoch hat sie nie großen Erfolg gehabt.\\
+Heutzutage wird sie va. nur noch für Kamervision-Projekte verwendet. Für diese bietet die Kinect viele Tools, um eine einfache Implementierung und Auswertung
+zu ermöglichen.
+\subsubsection{Kameras}
+Die Kinect kann 3 verschiedene Kamerafeeds ausgeben. Darunter sind ein normales Farbiges Bild, eine Tiefenmapp und ein Infrarot Bild.\\
+\begin{figure}[H]
+    \centering
+    \subfigure[Infrarot-Bild]{\includegraphics[width=0.4\textwidth]{Kinect IR picture.png}}
+    \subfigure[Tiefen-Bild]{\includegraphics[width=0.4\textwidth]{Kinect depth picture.jpg}}
+    \caption{Kamerafeeds der Kinect}
+    \label{fig:Kamerafeeds}
+\end{figure}
+\subsubsection{Skelett}
+Die Kinect kann Menschen erkennen, und ihnen Skelette zuordnen, um einfache Implementierung von gestenbasierten Anwendungen zu ermöglichen.
+\begin{figure}[H]
+    \centering
+    \subfigure[Skelettpunkte]{\includegraphics[width=0.59\textwidth]{Kinect Joint Map.png}}
+    \subfigure[Beispielbild]{\includegraphics[width=0.39\textwidth]{Kinect Skeletton picture.png}}
+    \caption[Kinect Skelett]{Skelettpunkte des Körpers}
+    \label{fig:Koerperpunkte}
+\end{figure}
+\subsubsection{Coordinate Mapping}
+Durch überlagerung der Depthmap, mit dem Skelett kann man eine Maske für das Farbbild erstellen, und so einen Greenscreen Simulieren.
+Ein Beispiel ist in \cite{KinectBackgroundRemoval} zu finden.\\
+\subsubsection{Facedetection}
+Weiterhin ist in der Kinect bereits eine vielzahl an Tools zu Gesichtserkennung integriert\cite{KinectFaceTracking}, es werden direkt die Position von Gesichtern und eine Facemap zurück gegeben.
+Dadurch lässt sich sich z.B. auch für Windows Hello verwenden.\\\
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{kinect-face-hd-2.png}
+    \caption[Kinect Facemap]{Kinect Facemap}
+    \label{fig:Kinect Facemap}
+\end{figure}
+\subsubsection{3D-Bild}
+Aufgrund der Tiefendaten und des Farbbildes lassen sich mit der Kinect auch 3D-Modelle erstellen.
+Dazu giebt es direct von Microsoft die App 3D Scan\cite{3DScan}
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.7\textwidth]{Kinect-Fusion.png}
+    \caption[Kinect Fusion]{Kinect Fusion}
+    \label{fig:Kinect Fusion}
+\end{figure}
+
+\subsubsection{Gesten}
+Die Kinect unterstützt die Erkennung von Handgesten. Vorgefertigt sind die Gesten Lasso, Offen und Geschlossen.
+Weitere Gesten können über den Gesturebuilder, der mit dem KinectSDK\cite{KinectSDK} installiert wird, definiert werden.
+Genaueres dazu wird im nächsten Kapitel erläutert.
+\newpage
 \subsection{Konzept}
+
+Um eine Richtungsangabe über die Kinect zu bekommen, wird ein Skelett gesucht und von diesem die Hände verfolgt.
+Die Hände werden dann überwacht ob eine Geste erkannt wird. Weiterhin wird das Tiefenbild in zusammenhang mit den Koordinaten der Hände verwendet, um im Bild, in der Benutzeroberfläche, die Erkannten Hände einzuzeichnen.\\
 Auf der Basis der erkannten Gesten der Kinect und der Richtung der Lasso Geste soll eine Bewegungsanweisung an den Krahn gesendet werden.\\
 Die Gesten sind wie folgt:
 \begin{figure}[H]
@@ -16,49 +68,7 @@ Die offene Hand wird nicht als Geste verwendet, da auch eine Möglichkeit besteh
 Hand kann der Regler des Krahns oder die Betriebsmodi des Krahs umgeschalten werden. Über die Lasso Geste soll die Bewegung gesteuert werden, dazu
 werden über das Skelett des zugehörigen Körpers die Koordinaten von Handmittelpunkt und Fingerspitze verglichen.
 
-\subsection{Die Kinect}
-Die Kinect ist ein vielseitiges Stück Hardware, das eigentlich für die xBox 360 als gegenstück zu Wii dienen sollte. Jedoch hat sie nie großen Erfolg gehabt.\\
-Heutzutage wird sie va. nur noch für Kamervision-Projekte verwendet. Für diese bietet die Kinect viele Tools, um eine einfache Implementierung und Auswertung
-zu ermöglichen.
-\subsubsection{Kameras}
-Die Kinect kann 3 verschiedene Kamerafeeds ausgeben. Darunter sind ein normales Farbiges Bild, eine Tiefenmapp und ein Infrarot Bild.\\
-\begin{figure}[H]
-    \centering
-    \subfigure[IR]{\includegraphics[width=0.4\textwidth]{Kinect IR picture.png}}
-    \subfigure[depth]{\includegraphics[width=0.4\textwidth]{Kinect depth picture.jpg}}
-    \caption{Kamerafeeds der Kinect}
-    \label{fig:Kamerafeeds}
-\end{figure}
-\subsubsection{Skelett}
-Die Kinect kann Menschen erkennen, und ihnen Skelette zuordnen, um einfache Implementierung von gestenbasierten Anwendungen zu ermöglichen.
-\begin{figure}[H]
-    \centering
-    \subfigure[Skelettpunkte]{\includegraphics[width=0.59\textwidth]{Kinect Joint Map.png}}
-    \subfigure[Beispielbild]{\includegraphics[width=0.39\textwidth]{Kinect Skeletton picture.png}}
-    \caption[Kinect Skelett]{Skelettpunkte des Körpers}
-    \label{fig:Koerperpunkte}
-\end{figure}
-\subsubsection{Coordinate Mapping}
-Durch überlagerung der Depthmap, mit dem Skelett kann man eine Maske für das Farbbild erstellen, und so einen Greenscreen Simulieren.
-Ein Beispiel ist auf Folgendem Link Aufgeführt.\cite{KinectBackgroundRemoval}\\
-\subsubsection{Facedetection}
-Weiterhin ist in der Kinect bereits eine vielzahl an Tools zu Gesichtserkennung integriert.
-\cite{KinectFaceTracking}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{kinect-face-hd-2.png}
-\end{figure}
-\subsubsection{3D-Bild}
-Aufgrund der Tiefendaten und des Farbbildes lassen sich mit der Kinect auch 3D-Modelle erstellen.
-Dazu giebt es direct von Microsoft die App 3D Scan\cite{3DScan}
-\begin{figure}[H]
-    \centering
-    \includegraphics[width=0.7\textwidth]{Kinect-Fusion.png}
-\end{figure}
 
-\subsubsection{Gesten}
-Wie schon im Vorherigen Kapitel erwähnt, unterstützt die Kinect die Erkennung von Handgesten. Vorgefertigt sind die Gesten Lasso, Offen und Geschlossen.
-Weitere Gesten können über den Gesturebuilder, der mit dem KinectSDK\cite{KinectSDK} installiert wird, definiert werden.
 \subsection{Code}
 
 \subsubsection{Krahnsteuerung}
