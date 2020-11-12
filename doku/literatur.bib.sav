@@ -1,0 +1,36 @@
+% Encoding: UTF-8
+
+@misc{KinectSDK,
+  author = {Microsoft},
+  url    = {https://www.microsoft.com/en-us/download/details.aspx?id=44561}
+}
+
+@misc{KinectFingerTracking,
+  author       = {LightBuzz},
+  title        = {Kinect Finger Tracking},
+  howpublished = {Github},
+  url          = {https://github.com/LightBuzz/Kinect-Finger-Tracking}
+}
+
+@misc{KinectBackgroundRemoval,
+  author       = {Vangos Pterneas},
+  title        = {BACKGROUND REMOVAL USING KINECT 2 (GREEN SCREEN EFFECT)},
+  howpublished = {Website},
+  url          = {https://pterneas.com/2014/04/11/kinect-background-removal/}
+}
+
+@misc{KinectFaceTracking,
+  author       = {Vangos Pterneas},
+  title        = {HOW TO USE KINECT HD FACE},
+  howpublished = {Website},
+  url          = {https://pterneas.com/2015/06/06/kinect-hd-face/}
+}
+
+@Article{,
+  author = {Microsoft},
+  title  = {KinectFusion: Real-Time Dense Surface Mapping and Tracking},
+  file   = {:X\:/OneDrive/Dokumente/GitHub/OTH-AW-CraneControl/doku/images/ismar2011.pdf:PDF},
+  url    = {https://www.microsoft.com/en-us/research/wp-content/uploads/2016/02/ismar2011.pdf},
+}
+
+@Comment{jabref-meta: databaseType:bibtex;}
