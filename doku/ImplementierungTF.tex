@@ -104,7 +104,7 @@ Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als a
 
 \subsubsection{Lite Graph}
 Mit einem Klick auf \textit{Export Lite Convertible Graph} wird ein Saved Model nach ObjectDetection/export/LiteConvertibleGraph exportiert, das mit dem TFLite-Converter (\url{https://www.tensorflow.org/lite/convert}) zu einem TFLite Model convertiert werden kann.
-
+\newpage
 \subsection{Python Anwendung}
 Um die trainierten Modelle verwenden zu können wurde eine Python Anwendung geschrieben, die TF 1, TF 2 und TF Lite Modelle unterstützt.
 \begin{figure}[H]
@@ -138,9 +138,17 @@ lastline=41]
 
 \subsubsection{Setup und Ausführung}
 Die Anwendung wird über aufrufen von \textit{CraneControl.py} mit Python gestartet. 
-
+Benötiget pip Packete: Pillow,opencv-python,psutil,tensorflow (nur x86/x64)
 
 \textbf{Für PI:} \\
-TFLight : \url{https://www.tensorflow.org/lite/guide/python}\\
-Apt.Get : sudo apt-get install python3-pil python3-pil.imagetk libatlas-base-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test\\
-Pip3: pip3 install Pillow,opencv-python\\
+Um die Anwendung auf einem PI verwenden zu können muss der TensorFlow Lite-Interpreter installiert werden(\url{https://www.tensorflow.org/lite/guide/python}).
+Außerdem müssen einige APT Packete installiert werden. (python3-pil python3-pil.imagetk libatlas-base-dev libhdf5-dev libhdf5-serial-dev libatlas-base-dev libjasper-dev libqtgui4 libqt4-test).
+Auf dem Pi können nur Lite-Graphen ausgeführt werden.
+
+
+\textbf{Mitgelieferte Modelle:}
+\begin{itemize}
+    \item mobilnet_300x300v2.tflite [TFLite] (Ungenau aber sehr schnell)
+    \item mobilnet_300x300.pb [TF1] (Genau aber schnell)
+    \item ResNet 50 [TF2] (Sehr genau aber langsam)
+\end{itemize}
