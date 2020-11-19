@@ -26,7 +26,7 @@ import Modules.TfBinding as TF
 
 # Settings
 #####################
-tfVersion = TfVersion.Tf2
+tfVersion = TfVersion.Tf1
 min_conf_threshold = 0.5
 buffer_Lenght = 60
 evaluation_Slice_Size = 5

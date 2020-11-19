@@ -58,8 +58,8 @@ Nach erstem öffnen und schließen des TensorflowTrainer wird eine Settings.json
 Hier können Einstellungen angepasst werden, wobei das Feld \textbf{ModelUrl} das wichtigste ist, da hier das zu verwendende Model des TF-Model-Zoo (\url{https://github.com/tensorflow/models/blob/master/research/object_detection/g3doc/tf2_detection_zoo.md}) angegeben werden kann.
 
 \subsubsection{Downloads und Setup}
-Um die Restlichen Daten herunterzuladen, müssen die drei \textit{Download}-Buttons betätigt werden. Um die Downloads zu löschen kann der \textit{Clear Cache}-Button verwendet werden.
-Nun muss in Environment ein Ordner augewähl werden, in dem das Training statfinden soll. Danach muss der \textit{Build}-Button betätigt werden. Der \textit{Open}-Button öffnet den ObjectDetection-Ordner.
+Um die restlichen Daten herunterzuladen, müssen die drei \textit{Download}-Buttons betätigt werden. Um die Downloads zu löschen kann der \textit{Clear Cache}-Button verwendet werden.
+Nun muss in Environment ein Ordner augewähl werden, in dem das Training stattfinden soll. Danach muss der \textit{Build}-Button betätigt werden. Der \textit{Open}-Button öffnet den ObjectDetection-Ordner.
 Um die Installation abzuschließen muss zuerst der \textit{Compile *.protoc Files}- und danach der \textit{Execute setup.py}-Button betätigt werden. Nun werden alle ObjectDetection Module installiert und die Tensorflow Tests ausgeführt.
 Wenn das Testergebnis \textit{OK} ist war die Installation erfolgreich.
 
@@ -103,7 +103,7 @@ Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als a
 \end{itemize}
 
 \subsubsection{Lite Graph}
-Mit einem Klick auf \textit{Export Lite Convertible Graph} wird ein Saved Model nach ObjectDetection/export/LiteConvertibleGraph exportiert, das mit dem TFLite-Converter (\url{https://www.tensorflow.org/lite/convert}) zu einem TFLite Model convertiert werden kann.
+Mit einem Klick auf \textit{Export Lite Convertible Graph} wird ein Model nach ObjectDetection/export/LiteConvertibleGraph exportiert, das mit dem TFLite-Converter (\url{https://www.tensorflow.org/lite/convert}) zu einem TFLite Model convertiert werden kann.
 \newpage
 \subsection{Python Anwendung}
 Um die trainierten Modelle verwenden zu können wurde eine Python Anwendung geschrieben, die TF 1, TF 2 und TF Lite Modelle unterstützt.
