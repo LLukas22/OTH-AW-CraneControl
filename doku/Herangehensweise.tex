@@ -5,9 +5,9 @@ Durch die Anforderung von 2 Möglichkeiten wurden diese Aufgeteilt und jeder hat
 Zuerst wurde das Kinect 2.0 SDK heruntergeladen und installiert. Danach wurde ein Beispielproject gesucht \cite{KinectFingerTracking}, welches sich
 auch zum Teil im Fertigen Project wiederfindet. Es dient der Veranschaulichung, welche Hände momentan erkannt werden,
 und zeichnet um diese einen Rahmen herum. Danach wurde auf Basis der Vordefinierten Gesten der Kinect Gesten für die Krahnbewegungen festgelegt und
-die Geste für Bewgung mit einer Richtungsangabe über das Skelett versehen. Diese wurden dann an den Server gegebn, das dieser diese dem Krahn auf
+die Geste für Bewgung mit einer Richtungsangabe über das Skelett versehen. Diese werden dann an den Server übergeben, das dieser diese dem Krahn auf
 Anfrage mitteilen kann.
 \section{Tensorflow}
 Zuerst wurde ein PASCAL-VOC Bild Datenset erstellt und Annotiert (~600 Bilder). Dazu wurden von verschiedenen Personen Bilder gemacht während sie die definierten Gesten ausführen.
-Danach wurdeb mit der Tensorflow-Object-Detection-API verschiedene CNN-Modelle träniert, dmait sie die Gesten in einem Webcam-Stream erkennen.Die fertig Python Application lädt eines der Modelle, erkennt die Gesten , zeichnet Rechtecke um die erkannten Gesten und ermittelt die dazugehörige Krahnbewegung.
+Danach wurdeb mit der Tensorflow-Object-Detection-API verschiedene CNN-Modelle trainiert, damit sie die Gesten in einem Webcam-Stream erkennen. Die fertig Python Application lädt eines der Modelle, erkennt die Gesten , zeichnet Rechtecke um die erkannten Gesten und ermittelt die dazugehörige Krahnbewegung.
 Der TCP-Server baut danach das Byte-Array und sendet as an den Krahn.

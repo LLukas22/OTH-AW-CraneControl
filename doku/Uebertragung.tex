@@ -1,6 +1,7 @@
 \chapter{Übertragung}
-In den Anwendungen ist ein TCP/IP Server implementiert, von dem Ser Krahn die Daten abgreifen kann. Dieser läuft auf Port 54000 und sendet die Daten
+In den Anwendungen ist ein TCP/IP Server implementiert, von dem der Krahn die Daten abgreifen kann. Dieser läuft auf Port 54000 und sendet die Daten
 als 5 Byte großes Array.\\
+\\\
 Diese Bytes teilen sie wie folg auf:
 \begin{table}[H]
     \centering
@@ -12,4 +13,10 @@ Diese Bytes teilen sie wie folg auf:
     \caption{Übertragungsprotokoll}
     \label{tab:Protokoll}
 \end{table}
-Zum Testen wurde ein Dummy Client in python geschrieben, der dauerhaft Daten anfordert und diese in der Konsole ausgiebt.
+Zum Testen wurde ein Dummy Client in Python geschrieben, der dauerhaft Daten anfordert und diese in der Konsole ausgiebt.
+\begin{figure}[H]
+    \centering
+    \includegraphics[width=0.6\textwidth]{PythonClient.png}
+    \caption[Python Client]{Python Client}
+    \label{fig:Python Client}
+\end{figure}

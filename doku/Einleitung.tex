@@ -20,13 +20,13 @@ Abbildung 1.1, implementiert werden.
 	\label{fig:pi4}
 \end{figure}
 
-Die Kinect 2 von Microsoft ist der Nachfolger der Ursprüglichen Kinect für die xBox 360 und wurde vorallem für Spiele entwockelt,
-fand jedoch in diesem Gebiet wenig Markterfolg. Darum wurde die Kinect für xBox nach der Kinect 2 eingestellt. Seit dem findet die Kinect vor allem
-Anwendung in Kameravison Anwendungen. Beispielsweise ist hier das Ganzkörpertracking für VR-Anwendungen zu nennen. Durch diese Entwicklung hat sich
-Microsoft dazu entschieden, die Kinect Azure für Unternehmen zu entwickeln und als Entwicklungsumgebung zu vermarkten.\\
-Durch die 3 Kameras, wovon eine Infrarot- und eine Tiefenkamera verbaut sind, und den on-Board Prozessor kann die Kinect in Anwendungen viel Arbeit
-abnehmen, da sie bereits viele Daten auswertet und verarbeitet. So giebt die Kinect dem Anwender bis zu 6 Ganzkörper Skelette mit einzelnen "Gelenken"
-die danach weiter verarbeitet werden können. Außerdem ist einen Gesten und Mimikerkennung bereits mit verbaut.\\
+Die Kinect 2 von Microsoft ist der Nachfolger der Ursprüglichen Kinect, die für die xBox 360 und wurde vorallem für Spiele entwickelt wurde.
+In diesem Gebiet fand sie jedoch wenig Markterfolg. Darum wurde die Kinect für xBox nach der Kinect 2 eingestellt.
+Seit dem findet die Kinect vor allem in Applicationen der Kameravison Anwendungen. Beispielsweise ist hier das Ganzkörpertracking für VR-Anwendungen zu nennen.
+Durch diese Entwicklung hat sich Microsoft dazu entschieden, die Kinect Azure für Unternehmen zu entwickeln und als Entwicklungsumgebung zu vermarkten.\\
+Durch die 3 Kameras, wovon eine Infrarot- und eine Tiefenkamera verbaut sind, und den on-Board Prozessor kann die Kinect in Projekten viel Arbeit
+abnehmen, da sie bereits viele Daten auswerten und verarbeiten kann. So gibt die Kinect dem Anwender bis zu 6 Ganzkörper Skelette mit einzelnen "Gelenken"
+die danach weiter ausgewertet werden können. Außerdem ist einen Gesten und Mimikerkennung bereits mit verbaut.\\
 Für die Entwicklung von Kinectanwendungen stellt Microsoft ein umfangreiches Software Developer Kit SDK 2.0 \cite{KinectSDK} zu Verfügung. Darüber kann
 ein Kinectobject erzeugt werden, dass alle Sensorausgaben und Skelettdaten als Membervariablen ausgiebt.
 
@@ -40,11 +40,11 @@ ein Kinectobject erzeugt werden, dass alle Sensorausgaben und Skelettdaten als M
 TensorFlow ist ein, von Google entwickeltes, Framework zur datenstromorientierten Programmierung.
 Populäre Anwendung findet TensorFlow im Bereich des maschinellen Lernens.
 Seit 2020 wurde die TensorFlow Object Detection API offiziel in Tensorflow 2.0 integriert und ermöglicht das einfache und schnelle erstellen von ObjectDetection Modellen.
-Hierfür werden von Google mehrere vortränierte Modelle über den Detection Model Zoo bereitgestellt, die innerhalb von wenigen Stunden und mit relativ kleinen Datenmengen auf einen neuen Datensatz gangepasst werden können.
+Hierfür werden von Google mehrere vortrainierte Modelle über den Detection Model Zoo bereitgestellt, die innerhalb von wenigen Stunden und mit relativ kleinen Datenmengen auf einen neuen Datensatz gangepasst werden können.
 
 \newpage
 \section{Anforderungen}
-Der Krahn soll sich über Wlan an einem Server, der lokal auf einem Rechner im Labor läuft, anmelden und dieser soll die Daten aus der Erkennung von
+Der Krahn soll sich über Wlan mit einem Server, der lokal auf einem Rechner im Labor läuft, verbinden und dieser soll die Daten aus der Erkennung von
 Kinect oder TensorFlow an den Krahn auf Anfrage übermitteln.\\
 \\\
 Für die Bewegung des Krahns sollen Gesten implementiert werden:

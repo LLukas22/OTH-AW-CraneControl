@@ -16,7 +16,7 @@ Die erkannte Geste wird in einem Buffer zwischengespeichert, und wenn mehrere Du
 \end{figure}
 \newpage
 \subsection{Tensorflow Trainer}
-Um das tränieren der Modele zu erleichtern wurde eine C\# Application geschrieben, die diesen Vorgang weitgehend automatisiert.
+Um das trainieren der Modele zu erleichtern wurde eine C\# Application geschrieben, die diesen Vorgang weitgehend automatisiert.
 
 \begin{figure}[H]
     \centering
@@ -25,7 +25,7 @@ Um das tränieren der Modele zu erleichtern wurde eine C\# Application geschrieb
     \label{fig:Tensorflow Trainer}
 \end{figure}
 
-\subsection{Tränieren eines eigene Models}
+\subsection{Trainieren eines eigene Models}
 
 \subsubsection{Voraussetzungen:}
 
@@ -35,14 +35,14 @@ Um das tränieren der Modele zu erleichtern wurde eine C\# Application geschrieb
     \item Python 3.7.X or newer (\url{https://www.python.org/downloads/})
     \item LabelImg (\url{https://github.com/tzutalin/labelImg})
     \item Nvidia Gpu (optional but highly recommended)
-    \begin{itemize}
-    \item CUDA Version (\url{https://www.tensorflow.org/install/gpu})
-    \item cuDNN Version (\url{https://developer.nvidia.com/cudnn})
-    \end{itemize}
+          \begin{itemize}
+              \item CUDA Version (\url{https://www.tensorflow.org/install/gpu})
+              \item cuDNN Version (\url{https://developer.nvidia.com/cudnn})
+          \end{itemize}
 \end{itemize}
 \newpage
 \subsubsection{Erstellen eines Datensatzes}
-Um eine Datensatz zu erzeugen müssen zunächst mit LabelImg Boxen (XML PASCAL VOC Format) um die zu Erkennenden Objekte gezogn werden.
+Um eine Datensatz zu erzeugen müssen zunächst mit LabelImg Boxen (XML PASCAL VOC Format) um die zu Erkennenden Objekte gezogen werden.
 Hierbei sind 150-250 Bilder pro Objekt ein guter Richtwert.
 
 \subsubsection{Python Packete}
@@ -64,8 +64,8 @@ Um die Installation abzuschließen muss zuerst der \textit{Compile *.protoc File
 Wenn das Testergebnis \textit{OK} ist war die Installation erfolgreich.
 
 \subsubsection{TF Records}
-Als Nächstes müssen alle Bilder mit *.Xml Dateien nach ObjectDetection/images/input kopiert werden und die in LabelImg verwendeten Label in richtiger Reihenfolgen in die Textbox eingegeben werden.
-Danach die 4 Buttons von links nach Rechts betätigen. Dies erzeugt test- und train.record im ObjectDetection-Ordner und autogeneriert die Labelmap und customPipeline in ObjectDetection/training.
+Als Nächstes müssen alle Bilder mit *.Xml Dateien nach ObjectDetection/images/input kopiert werden und die in LabelImg verwendeten Labels in richtiger Reihenfolgen in die Textbox eingetragen werden.
+Danach die 4 Buttons von Links nach Rechts betätigen. Dies erzeugt test- und train.record im ObjectDetection-Ordner und autogeneriert die Labelmap und customPipeline in ObjectDetection/training.
 
 \subsubsection{Pipeline Config}
 In der customPipeline.config können nach bedarf DataAugemntation-Optionen hinzugefügt oder entfernt werden (\url{https://stackoverflow.com/questions/44906317/what-are-possible-values-for-data-augmentation-options-in-the-tensorflow-object}).
@@ -80,24 +80,24 @@ Die wichtigsten anpassbaren Werten sind:
 
 \begin{itemize}
     \item \textbf{Batch_Size} was die auf einmal zu verarbeitenden Bilder sind. Falls nicht genug RAM im System verfügbar ist muss die Batch_Size gesenk werden.
-    \item \textbf{learning_rate_base} Geht der Loss nach einigen schritten gegen Unendlich ist die LearningRate zu hoch.
+    \item \textbf{learning_rate_base} Geht der Loss nach einigen Schritten gegen Unendlich ist die LearningRate zu hoch.
     \item \textbf{warmup_learning_rate} ähnlich wie learning_rate_base gilt aber nur für ersten warmup_steps.
 \end{itemize}
 
 
 \subsubsection{Training}
-Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als andere Option kann man auch im ObjectDetection Ordner \textit{python model_main_tf2.py} ausführen. Tenorboard kann über einen Click auf \textit{Open Tensorboard} geöffnet werden.
-Ändert der Loss sich nach einiger Zeit nicht mehr kann das Träning abgebrochen werden und das fertige Model über einen Klick auf \textit{Export Graph} nach ObjectDetection/export/normal exportiert werden und über  \textit{Test on Webcam} getestet werden.
+Das Training wird durch eine Click auf \textit{Start Training!} gestartet. Als andere Option kann man auch im ObjectDetection Ordner \textit{python model_main_tf2.py} ausführen. Tensorboard kann über einen Click auf \textit{Open Tensorboard} geöffnet werden.
+Ändert der Loss sich nach einiger Zeit nicht mehr kann das Training abgebrochen werden und das fertige Model über einen Klick auf \textit{Export Graph} nach ObjectDetection/export/normal exportiert werden und über  \textit{Test on Webcam} getestet werden.
 \\
 \textbf{Anmerkungen}
 \begin{itemize}
     \item[1.] Falls die Gpu nicht über genug Videospeicher verfügt besteht die Option Systemspeicher als Puffer zu verwednen. Dazu müssen in \textit{object_detection/model_main_tf2.py} nach dem Tensorflow import folgende Zeilen eingefügt werden:
-    \lstinputlisting[language=python,label={lst:Gpu Growth},
-    numbers={none},
-    caption={Gpu Growth},
-    firstline=30,
-    lastline=36]
-{CodeSamples/Tensorflow/model_main_tf2.py}
+          \lstinputlisting[language=python,label={lst:Gpu Growth},
+              numbers={none},
+              caption={Gpu Growth},
+              firstline=30,
+              lastline=36]
+          {CodeSamples/Tensorflow/model_main_tf2.py}
     \item[2.] Falls der Trainings Prozess einen Evaluations Durchgang ausführt und der TensorflowTrainer versucht den Prozess zu schließen läuft der Pyton Prozess weiter im Hintergrund -> Schließen über TaskManager.
 
 \end{itemize}
@@ -113,31 +113,31 @@ Um die trainierten Modelle verwenden zu können wurde eine Python Anwendung gesc
     \caption[Architektur]{Architektur}
     \label{fig:Tensorflow Architektur}
 \end{figure}
-Die Anwendung wurde für den Raspberry Pi 4 optimiert und verwendet alle 4 Prozessor Kerne gleichzeitg, dennoch sollte beachtet werden, dass die Rechenleistung des PI sehr beschränkt ist und nur TF Lite Modelle verwendet werden sollten.  
-
+Die Anwendung wurde für den Raspberry Pi 4 optimiert und verwendet alle 4 Prozessor Kerne gleichzeitg, dennoch sollte beachtet werden, dass die Rechenleistung des PI sehr beschränkt ist und nur TF Lite Modelle verwendet werden sollten.
+\newpage
 \subsubsection{GUI}
-Die GUI wurde sehr simpel gehalten um möglichst wenig CPU-Time zu brauchen.
+Die GUI wurde sehr simpel gehalten um möglichst wenig CPU-Time zu beanspruchen.
 \begin{figure}[H]
     \centering
     \subfigure{\includegraphics[width=1\textwidth]{TensorFlow/GUI.PNG}}
     \caption[Pyton Gui]{Pyton Gui}
     \label{fig:Tensorflow GUI}
 \end{figure}
-Mit den \textit{Stop} und  \textit{Restart} Buttons können die einzelnen Threads des Programms angehalten oder neu gestartet werden. In der Linken oberen Ecke sieht man die derzeitige CPU Auslastung und die letzte Tensorflow-Detection Zeit. Wenn man den Tensorflow Thread angehalten hat ist es Möglich den Kran direkt über die Richtungs Buttons zu steuern. 
+Mit den \textit{Stop} und  \textit{Restart} Buttons können die einzelnen Threads des Programms angehalten oder neu gestartet werden. In der Linken oberen Ecke sieht man die derzeitige CPU Auslastung und die letzte Tensorflow-Detection Zeit. Wenn man den Tensorflow Thread angehalten hat ist es Möglich den Kran direkt über die Richtungs Buttons zu steuern.
 
 \subsubsection{Einstellungen}
-Die Einstellungen können über Variablen in \textit{CraneControl.py} angepasst werden. 
+Die Einstellungen können über Variablen in \textit{CraneControl.py} angepasst werden.
 
 \lstinputlisting[language=python,label={lst:CraneControl Settings},
-numbers={none},
-caption={CraneControl Settings},
-firstline=24,
-lastline=41]
+    numbers={none},
+    caption={CraneControl Settings},
+    firstline=24,
+    lastline=40]
 {CodeSamples/Tensorflow/CraneControl.py}
 
 
 \subsubsection{Setup und Ausführung}
-Die Anwendung wird über aufrufen von \textit{CraneControl.py} mit Python gestartet. 
+Die Anwendung wird durch Aufrufen von \textit{CraneControl.py} mit Python gestartet.
 Benötiget pip Packete: Pillow,opencv-python,psutil,tensorflow (nur x86/x64)
 
 \textbf{Für PI:} \\

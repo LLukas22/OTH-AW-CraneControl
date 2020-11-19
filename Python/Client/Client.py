@@ -3,19 +3,20 @@ import time
 from time import sleep
 
 port = 54000
-powerstate = False   
-s = socket.socket()          
-s.connect(('192.168.188.42', port)) 
+powerstate = False
+s = socket.socket()
+s.connect(('localhost', port))
 lastpowermsg = False
-print("Client Created") 
+print("Client Created")
+
 
 def BuildMessage(bytearray):
     commands = "Package Recieved from Server: "
     global powerstate
     global lastpowermsg
-    
+
     if(bytearray[0] == 1 and bytearray[0] != lastpowermsg):
-      powerstate = not powerstate
+        powerstate = not powerstate
     lastpowermsg = bytearray[0]
 
     if(powerstate):
@@ -28,17 +29,17 @@ def BuildMessage(bytearray):
     else:
         commands += "Regler: OFF,"
 
-    if(bytearray[3]==1):
+    if(bytearray[3] == 1):
         commands += "Direction: UP"
-    if(bytearray[3]==2):
+    if(bytearray[3] == 2):
         commands += "Direction: DOWN"
-    if(bytearray[1]>0):
-        commands += "Direction: LEFT, Velocity: "+ str(int(bytearray[1]))
-    if(bytearray[2]>0):
-        commands += "Direction: RIGHT, Velocity: "+ str(int(bytearray[2]))
+    if(bytearray[1] > 0):
+        commands += "Direction: LEFT, Velocity: " + str(int(bytearray[1]))
+    if(bytearray[2] > 0):
+        commands += "Direction: RIGHT, Velocity: " + str(int(bytearray[2]))
     return commands
 
- 
+
 lastPackage = None
 while True:
     try:
@@ -53,4 +54,3 @@ while True:
         print("ConnectionResetError")
     except ConnectionAbortedError as exc:
         print("ConnectionAbortedError")
- 

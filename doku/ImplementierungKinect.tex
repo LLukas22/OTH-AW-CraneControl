@@ -52,7 +52,7 @@ Genaueres dazu wird im nächsten Kapitel erläutert.
 \subsection{Konzept}
 
 Um eine Richtungsangabe über die Kinect zu bekommen, wird ein Skelett gesucht und von diesem die Hände verfolgt.
-Die Hände werden dann überwacht ob eine Geste erkannt wird. Weiterhin wird das Tiefenbild in zusammenhang mit den Koordinaten der Hände verwendet, um im Bild, in der Benutzeroberfläche, die Erkannten Hände einzuzeichnen.\\
+Die Hände werden dann überwacht ob eine Geste erkannt wird. Weiterhin wird das Tiefenbild in zusammenhang mit den Koordinaten der Hände verwendet, um im Bild, in der Benutzeroberfläche, die erkannten Hände einzuzeichnen.\\
 Auf der Basis der erkannten Gesten der Kinect und der Richtung der Lasso Geste soll eine Bewegungsanweisung an den Krahn gesendet werden.\\
 Die Gesten sind wie folgt:
 \begin{figure}[H]
@@ -76,14 +76,14 @@ Im Hauptprogramm wird das Winform Fenster erzeugt und auch der Server verwaltet.
 unabhängig vom rest des Programms und antwortet dem Krahn auf anfrage mit den Bewegungsdaten.
 
 \subsubsection{Kinect}
-Hier wird die Kinect initialisiert und verwaltet. Ausgegeben werden die Bilder für die anzeige in der Windowsoberfläche und ein Array mit den erkannten
-Befehlen. Damit wird der Speicher im Server aktualisiert, vom der der Server ließt um dem Krahn daten zu senden.\\
-Die erkennung der Gesten für den Regler und die Betriebsmodi ist durch die Kinect bereits zu einem grißem Teil implementiert. Man muss sich nur
+Hier wird die Kinect initialisiert und verwaltet. Ausgegeben werden die Bilder für die Anzeige in der Windowsoberfläche und ein Array mit den erkannten
+Befehlen. Damit wird der Speicher im Server aktualisiert, von dem der Server ließt um dem Krahn Daten zu senden.\\
+Die Erkennung der Gesten für den Regler und die Betriebsmodi ist durch die Kinect bereits zu einem großem Teil implementiert. Man muss sich nur
 die aktullen Gesten mit der zugehörigen Hand ausgeben und bei der Kombination Rechte Hand ist geschlossen wird der Regler umgeschalten bzw. Linke Hand
 ist geschlossen dann wird der Betriebsmodus umgeschalten.\\
-Die Richtungsgesten gestalten sich etwach komplizeriter, da zur Geste "Lasso" auch noch eine Richtung benötigt wird. Dazu kann das Skelett, welches die
+Die Richtungsgesten gestalten sich etwas komplizierter, da zur Geste Lasso auch noch eine Richtung benötigt wird. Dazu kann das Skelett, welches die
 Kinect für jeden Körper im Bild erstellt, verwendet werden. Mann sieht sich die Punkte für Handmittelpunkt und Fingerspitze der Hand an, bei der
-das "Lasso" erkannt wurde an und vergleicht den Unterschied der x und y Koordinaten.
+die Lasso Geste erkannt wurde an und vergleicht den Unterschied der x und y Koordinaten von Handmittelpunkt und Fingerspitzen.
 \\\
 \lstinputlisting[label={lst:Bewegungsanweisung},
     numbers={none},
@@ -127,9 +127,9 @@ theoretisch sehr einfach weiter Module hinzugefügt werden.
 \newpage
 \subsection{User Interface}
 Das UI ist simple gehalten, um eine einfache Anwendung zu ermöglichen. Unten links wird der erkannte Befehl angezeigt. Rechts kann über das
-Zahnradsymbol ein Optionspannel ausgeklappt werden. Dort kann der Port, auf dem sich der Krahn verbinnden soll angegeben werden(Standard ist 54000),
+Zahnradsymbol ein Optionspannel ausgeklappt werden. Dort kann der Port, auf dem sich der Krahn verbinden soll angegeben werden(Standard ist 54000),
 darunter ist zu erkennen, ob ein Client verbunden ist. Weiterhin kann eingestellt werden, ob das Farb-, Infrarot- oder Tiefenbild angezeigt werden soll.
-Außerdem kann die Beschläunigung des Krahns verändert werden. Über Knöpfe kann der Server pausiert werden, so das keine Pakete mehr gesendet werden,
+Außerdem kann die Beschleunigungs des Krahns verändert werden. Über Knöpfe kann der Server pausiert werden, so das keine Pakete mehr gesendet werden,
 oder auch komplett ausgeschalten werden zum Neustarten.
 \begin{figure}[H]
     \centering
